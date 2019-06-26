@@ -42,7 +42,7 @@ public class MCreacionRutas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton2.setText("Asignacion_Chofer");
+        jButton2.setText("Aceptar");
 
         jButton3.setText("Borrar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
