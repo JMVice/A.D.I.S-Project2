@@ -28,9 +28,9 @@ public class MComprasHechas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jList1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Ruta SanJose-Alajuela", "Ruta Alajuela-SanJose", "Ruta SanJose-Cartago", "Ruta Cartago-SanJose", "Ruta SanJose-Heredia", "Ruta Heredia-SanJose", "Ruta SanJose-Puriscal", "Ruta Puriscal-SanJose", "Ruta SanJose-Puntarenas", "Ruta Puntarenas-SanJose" };
+            String[] strings = { "Ruta SanJose-Alajuela", "Ruta Alajuela-SanJose", "Ruta SanJose-Cartago", "Ruta Cartago-SanJose", "Ruta SanJose-Heredia", "Ruta Heredia-SanJose", "Ruta SanJose-Limon", "Ruta Limon-SanJose", "Ruta SanJose-Guanacaste", "Ruta Guanacaste-SanJose", "Ruta SanJose-Puntarenas", "Ruta Puntarenas-SanJose", "Ruta SanJose-Puriscal", "Ruta Puriscal-SanJose", "Ruta SanJose-Curridabat", "Ruta Curridabat-SanJose", "Ruta SanJose-Desamparados", "Ruta Desamparados-SanJose", "Ruta SanJose-Moravia", "Ruta Moravia-SanJose", "Ruta SanJose-SanRamon", "Ruta SanRamon-SanJose" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
