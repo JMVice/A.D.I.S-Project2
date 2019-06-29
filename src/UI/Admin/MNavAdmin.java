@@ -11,14 +11,14 @@ public class MNavAdmin extends javax.swing.JFrame {
     }
 
     private void settings() {
+        //Establece el icono en la barra de estado y en el icono.
+        setIconImage(Static.getIconImage());
         //Coloca el frame en el centro de la pantalla.
         this.setLocationRelativeTo(null);
         //Hace el frame visible.
         this.setVisible(true);
         //Establece texto en la barra de estado.
         this.setTitle(Static.app_name);
-        //Establece el icono en la barra de estado y en el icono.
-        setIconImage(Static.getIconImage());
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
     }
@@ -115,6 +115,7 @@ public class MNavAdmin extends javax.swing.JFrame {
 
     private void jButton3_log_outActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3_log_outActionPerformed
         MLogin mLogin = new MLogin();
+        this.dispose();
     }//GEN-LAST:event_jButton3_log_outActionPerformed
 
     private void jButton1_editar_rutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_editar_rutasActionPerformed

@@ -11,14 +11,14 @@ public class MChofer extends javax.swing.JFrame {
     }
 
     private void settings() {
+        //Establece el icono en la barra de estado y en el icono.
+        setIconImage(Static.getIconImage());
         //Coloca el frame en el centro de la pantalla.
         this.setLocationRelativeTo(null);
         //Hace el frame visible.
         this.setVisible(true);
         //Establece texto en la barra de estado.
         this.setTitle(Static.app_name);
-        //Establece el icono en la barra de estado y en el icono.
-        setIconImage(Static.getIconImage());
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
     }
@@ -143,7 +143,7 @@ public class MChofer extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("LOREM RUTA");
 
-        jToggleButton1.setText("Pagar/ Validar");
+        jToggleButton1.setText("Pagar / Validar");
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextField3.setText("$3.50 / 325E4543");
@@ -357,9 +357,7 @@ public class MChofer extends javax.swing.JFrame {
                             .addGap(66, 66, 66)
                             .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(0, 0, Short.MAX_VALUE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap()))
         );
 

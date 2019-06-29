@@ -170,7 +170,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Guardar ruta"/>
+            <Property name="text" type="java.lang.String" value="Guardar ruta / Cancelar edicion"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="jButton3_volver">
