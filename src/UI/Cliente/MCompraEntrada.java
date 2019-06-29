@@ -1,5 +1,7 @@
 package UI.Cliente;
 
+import Logica.Static;
+
 public class MCompraEntrada extends javax.swing.JFrame {
 
     public MCompraEntrada() {
@@ -12,6 +14,12 @@ public class MCompraEntrada extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         //Hace el frame visible.
         this.setVisible(true);
+        //Establece texto en la barra de estado.
+        this.setTitle(Static.app_name);
+        //Establece el icono en la barra de estado y en el icono.
+        setIconImage(Static.getIconImage());
+        //No dejar que el frame se pueda hacer de tamaño grande
+        this.setResizable(false);
     }
 
     @SuppressWarnings("unchecked")
