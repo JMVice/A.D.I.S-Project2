@@ -7,7 +7,7 @@ public class Tarjeta {
     private int DB_ID;
     //PartyID es equivalente a la variable DB_ID en el objeto Usuario. Nos
     //permite saber a quien pertenece esta tarjeta.
-    private int PartyID;
+    private int ClienteID;
     private String Num_tarjeta;
     private String CVV;
     private String Fecha_caducidad;
@@ -18,9 +18,9 @@ public class Tarjeta {
     }
 
     //Constructor para dar todas las variables.
-    public Tarjeta(int DB_ID, int PartyID, String Num_tarjeta, String CVV, String Fecha_caducidad, String Saldo) {
+    public Tarjeta(int DB_ID, int ClienteID, String Num_tarjeta, String CVV, String Fecha_caducidad, String Saldo) {
         this.DB_ID = DB_ID;
-        this.PartyID = PartyID;
+        this.ClienteID = ClienteID;
         this.Num_tarjeta = Num_tarjeta;
         this.CVV = CVV;
         this.Fecha_caducidad = Fecha_caducidad;
@@ -36,12 +36,12 @@ public class Tarjeta {
         this.DB_ID = DB_ID;
     }
 
-    public int getPartyID() {
-        return PartyID;
+    public int getClienteID() {
+        return ClienteID;
     }
 
-    public void setPartyID(int PartyID) {
-        this.PartyID = PartyID;
+    public void setClienteID(int ClienteID) {
+        this.ClienteID = ClienteID;
     }
 
     public String getNum_tarjeta() {

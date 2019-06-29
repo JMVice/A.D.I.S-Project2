@@ -10,9 +10,9 @@ public class Historial_compra {
     //este valor siempre sera 0.
     private int Monto;
     //Información del cliente que realizo este movimiento
-    private int PartyID_cliente;
-    //Información del cobrador que proceso este movimiento
-    private int PartyID_cobrador;
+    private int clienteID;
+    //Información del chofer que proceso este movimiento
+    private int choferID;
     //Variable para asociar el ticket que se ha usado en éste movimiento, cuando
     //aplique.
     private int TicketID;
@@ -22,11 +22,11 @@ public class Historial_compra {
     }
 
     //Contructor para establecer las variables
-    public Historial_compra(int DB_ID, int Monto, int PartyID_cliente, int PartyID_cobrador, int TicketID) {
+    public Historial_compra(int DB_ID, int Monto, int clienteID, int choferID, int TicketID) {
         this.DB_ID = DB_ID;
         this.Monto = Monto;
-        this.PartyID_cliente = PartyID_cliente;
-        this.PartyID_cobrador = PartyID_cobrador;
+        this.clienteID = clienteID;
+        this.choferID = choferID;
         this.TicketID = TicketID;
     }
 
@@ -47,20 +47,20 @@ public class Historial_compra {
         this.Monto = Monto;
     }
 
-    public int getPartyID_cliente() {
-        return PartyID_cliente;
+    public int getClienteID() {
+        return clienteID;
     }
 
-    public void setPartyID_cliente(int PartyID_cliente) {
-        this.PartyID_cliente = PartyID_cliente;
+    public void setClienteID(int clienteID) {
+        this.clienteID = clienteID;
     }
 
-    public int getPartyID_cobrador() {
-        return PartyID_cobrador;
+    public int getChoferID() {
+        return choferID;
     }
 
-    public void setPartyID_cobrador(int PartyID_cobrador) {
-        this.PartyID_cobrador = PartyID_cobrador;
+    public void setChoferID(int choferID) {
+        this.choferID = choferID;
     }
 
     public int getTicketID() {
