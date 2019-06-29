@@ -10,7 +10,7 @@ public class Run {
 
     //Metodo de inicializacion del programa. Se coloca en el Main.
     public static void start_program() {
-        MCreacionRutas mCreacionRutas = new MCreacionRutas();
+        MLogin mLogin = new MLogin();
     }
 
     //Metodo que genera numeros aleatorios segun se especifique como un maximo

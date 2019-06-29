@@ -12,6 +12,8 @@ public class Ticket {
     private int RutaID;
     //Codigo del ticket. Se refiere al codigo unico que genera el sistema.
     private String Codigo;
+    //Guarda el numero de pasajeros que el ticket permite.
+    private int pasajeros;
     private String Fecha_caducidad;
     //Este boolean establece si el ticket ya ha sido utilizado o no.
     private boolean utilizado;
@@ -21,7 +23,33 @@ public class Ticket {
     }
 
     //Constructor para establecer las variables
+    public Ticket(int DB_ID, int ClienteID, int RutaID, String Codigo, int pasajeros, String Fecha_caducidad, boolean utilizado) {
+        this.DB_ID = DB_ID;
+        this.ClienteID = ClienteID;
+        this.RutaID = RutaID;
+        this.Codigo = Codigo;
+        this.pasajeros = pasajeros;
+        this.Fecha_caducidad = Fecha_caducidad;
+        this.utilizado = utilizado;
+    }
+
     //Seccion de get y set
+    public int getClienteID() {
+        return ClienteID;
+    }
+
+    public void setClienteID(int ClienteID) {
+        this.ClienteID = ClienteID;
+    }
+
+    public int getPasajeros() {
+        return pasajeros;
+    }
+
+    public void setPasajeros(int pasajeros) {
+        this.pasajeros = pasajeros;
+    }
+
     public int getDB_ID() {
         return DB_ID;
     }
