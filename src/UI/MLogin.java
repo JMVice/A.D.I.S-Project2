@@ -1,6 +1,6 @@
 package UI;
 
-import Logica.Static;
+import Logica.Memoria;
 import UI.Admin.MNavAdmin;
 import UI.Chofer.MChofer;
 import UI.Cliente.MNavCliente;
@@ -14,13 +14,13 @@ public class MLogin extends javax.swing.JFrame {
 
     private void settings() {
         //Establece el icono en la barra de estado y en el icono.
-        setIconImage(Static.getIconImage());
+        setIconImage(Memoria.getIconImage());
         //Coloca el frame en el centro de la pantalla.
         this.setLocationRelativeTo(null);
         //Hace el frame visible.
         this.setVisible(true);
         //Establece texto en la barra de estado.
-        this.setTitle(Static.app_name);
+        this.setTitle(Memoria.app_name);
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
     }
