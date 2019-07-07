@@ -1,5 +1,6 @@
 package Logica;
 
+import Objetos.Usuario;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,8 +81,37 @@ public class SQLite {
             System.out.println("Query finished");
             Close_connection();
         }
-    }    
-    
+    }
+
+    public LinkedList<Usuario> obtener_usuarios(String query) {
+        LinkedList<Usuario> lista_usuarios = new LinkedList<Usuario>();
+        try {
+            Usuario u = new Usuario();
+            this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
+            Statement stmt = this.con.createStatement();
+            this.rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                u.setDB_ID(rs.getInt("UserID"));
+                u.setRol(rs.getString("Rol"));
+                u.setNombre_de_usuario(rs.getString("Nombre_usuario"));
+                u.setContrasenia(rs.getString("Contrasenia"));
+                u.setNombre(rs.getString("Nombre"));
+                u.setAp_paterno(rs.getString("Ap_paterno"));
+                u.setAp_materno(rs.getString("Ap_materno"));
+                u.setHabilitado(rs.getBoolean("Habilitado"));
+                lista_usuarios.add(u);
+                u = new Usuario();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            System.out.println("Query finished");
+            Close_connection();
+        }
+        return lista_usuarios;
+    }
+
     //Metodos de plantilla
     //<editor-fold desc="Templates SQLite methods">
     //Template request object with paramethers
@@ -150,6 +181,7 @@ public class SQLite {
     public void setData_source_path(String data_source_path) {
         this.data_source_path = data_source_path;
     }
+
     //</editor-fold>
     //<editor-fold desc="Deprecated code">
     public Boolean isConnectionEstablished() {
