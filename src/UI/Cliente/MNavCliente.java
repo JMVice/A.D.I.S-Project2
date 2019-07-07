@@ -1,6 +1,7 @@
 package UI.Cliente;
 
 import Logica.Memoria;
+import Objetos.Usuario;
 import UI.MLogin;
 
 public class MNavCliente extends javax.swing.JFrame {
@@ -21,6 +22,8 @@ public class MNavCliente extends javax.swing.JFrame {
         this.setTitle(Memoria.app_name);
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
+        //Seteamos el nombre del usuario en el UI
+        this.jLabel2_usuario_actual_label.setText("Usuario: " + Memoria.usuario_actual.getNombre_de_usuario());
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +37,7 @@ public class MNavCliente extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton7_log_out = new javax.swing.JButton();
         jButton4_cuenta_y_perfil = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel2_usuario_actual_label = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,7 +85,7 @@ public class MNavCliente extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("[Usuario JMV]");
+        jLabel2_usuario_actual_label.setText("[Usuario JMV]");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -104,14 +107,14 @@ public class MNavCliente extends javax.swing.JFrame {
                             .addComponent(jButton7_log_out, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel2)))
+                        .addComponent(jLabel2_usuario_actual_label)))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(jLabel2_usuario_actual_label)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
@@ -164,6 +167,7 @@ public class MNavCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4_cuenta_y_perfilActionPerformed
 
     private void jButton7_log_outActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7_log_outActionPerformed
+        Memoria.usuario_actual = new Usuario();
         MLogin mLogin = new MLogin();
         this.dispose();
     }//GEN-LAST:event_jButton7_log_outActionPerformed
@@ -176,7 +180,7 @@ public class MNavCliente extends javax.swing.JFrame {
     private javax.swing.JButton jButton4_cuenta_y_perfil;
     private javax.swing.JButton jButton7_log_out;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel2_usuario_actual_label;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,7 +1,5 @@
 package Logica;
 
-import UI.Admin.*;
-import UI.Cliente.*;
 import UI.MLogin;
 
 //Esta clase contiene metodos generalizados para concretas funciones del programa
@@ -10,6 +8,7 @@ public class Run {
 
     //Metodo de inicializacion del programa. Se coloca en el Main.
     public static void start_program() {
+        //Abre el menu de log in.
         MLogin mLogin = new MLogin();
     }
 

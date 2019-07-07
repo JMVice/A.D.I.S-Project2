@@ -1,11 +1,21 @@
 package UI;
 
+import Logica.AES;
 import Logica.Memoria;
+import Objetos.Usuario;
 import UI.Admin.MNavAdmin;
 import UI.Chofer.MChofer;
 import UI.Cliente.MNavCliente;
+import UI.Cliente.MRegistro;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 public class MLogin extends javax.swing.JFrame {
+
+    //Lista que guardara temporalmente los usuaios para comprobar credenciales
+    //e iniciar sesion.
+    private LinkedList<Usuario> lista_usuarios = new LinkedList();
 
     public MLogin() {
         initComponents();
@@ -30,20 +40,22 @@ public class MLogin extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1_log_in = new javax.swing.JButton();
+        jButton_log_in = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         jTextField1_nombre_usuario = new javax.swing.JTextField();
+        jButton_registrarse = new javax.swing.JButton();
+        jLabel3_status = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1_log_in.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1_log_in.setText("Ingresar");
-        jButton1_log_in.addActionListener(new java.awt.event.ActionListener() {
+        jButton_log_in.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton_log_in.setText("Ingresar");
+        jButton_log_in.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1_log_inActionPerformed(evt);
+                jButton_log_inActionPerformed(evt);
             }
         });
 
@@ -55,18 +67,31 @@ public class MLogin extends javax.swing.JFrame {
         jLabel1.setText("Nombre de usuario");
 
         jPasswordField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jPasswordField1KeyTyped(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Contraseña");
 
         jTextField1_nombre_usuario.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField1_nombre_usuario.setText("user123");
-        jTextField1_nombre_usuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1_nombre_usuarioActionPerformed(evt);
+        jTextField1_nombre_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1_nombre_usuarioKeyTyped(evt);
             }
         });
+
+        jButton_registrarse.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton_registrarse.setText("Registrarse");
+        jButton_registrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_registrarseActionPerformed(evt);
+            }
+        });
+
+        jLabel3_status.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -87,11 +112,14 @@ public class MLogin extends javax.swing.JFrame {
                                 .addGap(28, 28, 28)
                                 .addComponent(jTextField1_nombre_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addComponent(jButton1_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(159, 159, 159)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(117, 117, 117)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton_registrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3_status))))
                 .addContainerGap(104, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -108,8 +136,12 @@ public class MLogin extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
-                .addComponent(jButton1_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addComponent(jButton_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton_registrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3_status)
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -122,43 +154,99 @@ public class MLogin extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1_nombre_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1_nombre_usuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1_nombre_usuarioActionPerformed
+    private void jButton_log_inActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_log_inActionPerformed
+        iniciar_sesion();
+    }//GEN-LAST:event_jButton_log_inActionPerformed
 
-    private void jButton1_log_inActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_log_inActionPerformed
-        switch (jTextField1_nombre_usuario.getText().toLowerCase()) {
-            case "cliente":
-                MNavCliente mNavCliente = new MNavCliente();
-                this.dispose();
+    private void iniciar_sesion() {
+        if (!new String(jPasswordField1.getPassword()).equals("") && !jTextField1_nombre_usuario.getText().equals("")) {
+            this.lista_usuarios = Memoria.sql_lite_query.obtener_usuarios("SELECT * FROM USER");
+            if (!this.lista_usuarios.isEmpty()) {
+                for (Usuario u : this.lista_usuarios) {
+                    if (AES.decrypt(u.getContrasenia(), Memoria.DBKeyPassword).equals(new String(jPasswordField1.getPassword()))
+                            && u.getNombre_de_usuario().equals(jTextField1_nombre_usuario.getText())) {
+                        Memoria.usuario_actual = u;
+                        switch (u.getRol()) {
+                            case "admin":
+                                MNavAdmin mNavAdmin = new MNavAdmin();
+                                this.dispose();
+                                break;
+                            case "cliente":
+                                MNavCliente mNavCliente = new MNavCliente();
+                                this.dispose();
+                                break;
+                            case "chofer":
+                                MChofer mChofer = new MChofer();
+                                this.dispose();
+                                break;
+                            default:
+                                throw new AssertionError();
+                        }
+                        break;
+                    }
+                }
+                label_status_change("El usuario o la contraseña no es correcta.", "red");
+            } else {
+                System.out.println("sin usuarios");
+                label_status_change("No hay usuarios en la base de datos", "red");
+            }
+        } else {
+            label_status_change("Debe rellenar todos los espacios.", "red");
+        }
+    }
+
+    private void jButton_registrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_registrarseActionPerformed
+        MRegistro mRegistro = new MRegistro();
+        this.dispose();
+    }//GEN-LAST:event_jButton_registrarseActionPerformed
+
+    private void jPasswordField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyTyped
+        char c = evt.getKeyChar();
+        if (c == KeyEvent.VK_ENTER) {
+            iniciar_sesion();
+        }
+    }//GEN-LAST:event_jPasswordField1KeyTyped
+
+    private void jTextField1_nombre_usuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1_nombre_usuarioKeyTyped
+        char c = evt.getKeyChar();
+        if (c == KeyEvent.VK_ENTER) {
+            iniciar_sesion();
+        }
+    }//GEN-LAST:event_jTextField1_nombre_usuarioKeyTyped
+
+    private void label_status_change(String message, String color) {
+        switch (color) {
+            case "red":
+                jLabel3_status.setForeground(Color.red);
                 break;
-            case "admin":
-                MNavAdmin mNavAdmin = new MNavAdmin();
-                this.dispose();
+            case "blue":
+                jLabel3_status.setForeground(Color.blue);
                 break;
-            case "chofer":
-                MChofer mChofer = new MChofer();
-                this.dispose();
+            case "green":
+                jLabel3_status.setForeground(Color.green);
+                break;
+            case "black":
+                jLabel3_status.setForeground(Color.black);
                 break;
             default:
-                System.out.println("no case found.");
+                throw new AssertionError();
         }
-    }//GEN-LAST:event_jButton1_log_inActionPerformed
-
+        jLabel3_status.setText(message);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1_log_in;
+    private javax.swing.JButton jButton_log_in;
+    private javax.swing.JButton jButton_registrarse;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel3_status;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1_nombre_usuario;

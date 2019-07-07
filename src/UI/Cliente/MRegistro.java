@@ -1,14 +1,17 @@
 package UI.Cliente;
 
+import Logica.AES;
 import Logica.Memoria;
+import Objetos.Usuario;
+import UI.MLogin;
 
 public class MRegistro extends javax.swing.JFrame {
-
+    
     public MRegistro() {
         initComponents();
         settings();
     }
-
+    
     private void settings() {
         //Establece el icono en la barra de estado y en el icono.
         setIconImage(Memoria.getIconImage());
@@ -21,7 +24,7 @@ public class MRegistro extends javax.swing.JFrame {
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -34,12 +37,12 @@ public class MRegistro extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        jTextField1_nombre_de_usuario = new javax.swing.JTextField();
+        jTextField2_nombre = new javax.swing.JTextField();
+        jTextField3_segundo_apellido = new javax.swing.JTextField();
+        jTextField4_primer_apellido = new javax.swing.JTextField();
+        jTextField5_contrasenia = new javax.swing.JTextField();
+        jTextField6_repite_contrasenia = new javax.swing.JTextField();
         jButton1_cancelar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -68,6 +71,11 @@ public class MRegistro extends javax.swing.JFrame {
         });
 
         jButton2.setText("Crear cuenta");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,12 +96,12 @@ public class MRegistro extends javax.swing.JFrame {
                             .addComponent(jButton1_cancelar))
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField6)
-                            .addComponent(jTextField5)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField4)
+                            .addComponent(jTextField6_repite_contrasenia)
+                            .addComponent(jTextField5_contrasenia)
+                            .addComponent(jTextField3_segundo_apellido)
+                            .addComponent(jTextField2_nombre)
+                            .addComponent(jTextField1_nombre_de_usuario)
+                            .addComponent(jTextField4_primer_apellido)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -105,27 +113,27 @@ public class MRegistro extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1_nombre_de_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField2_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField4_primer_apellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField3_segundo_apellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField5_contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField6_repite_contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1_cancelar)
@@ -154,9 +162,36 @@ public class MRegistro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_cancelarActionPerformed
-        MNavCliente mNavCliente = new MNavCliente();
+        MLogin mLogin = new MLogin();
         this.dispose();
     }//GEN-LAST:event_jButton1_cancelarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Usuario u = new Usuario();
+        u.setRol("cliente");
+        u.setNombre_de_usuario(jTextField1_nombre_de_usuario.getText());
+        u.setContrasenia(AES.encrypt(jTextField5_contrasenia.getText(), Memoria.DBKeyPassword));
+        u.setNombre(jTextField2_nombre.getText());
+        u.setAp_paterno(jTextField4_primer_apellido.getText());
+        u.setAp_materno(jTextField3_segundo_apellido.getText());
+        u.setHabilitado(true);
+        Memoria.sql_lite_query.Query("INSERT INTO USER (Rol, "
+                + "Nombre_usuario, "
+                + "Contrasenia, "
+                + "Nombre, "
+                + "Ap_paterno, "
+                + "Ap_materno, "
+                + "Habilitado)\n"
+                + "VALUES ('" + u.getRol() + "', "
+                + "'" + u.getNombre_de_usuario() + "', "
+                + "'" + u.getContrasenia() + "', "
+                + "'" + u.getNombre() + "',"
+                + "'" + u.getAp_paterno() + "',"
+                + "'" + u.getAp_materno() + "',"
+                + "'" + u.isHabilitado() + "');");
+        Memoria.usuario_actual = u;
+        MNavCliente mNavCliente = new MNavCliente();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -170,11 +205,11 @@ public class MRegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField1_nombre_de_usuario;
+    private javax.swing.JTextField jTextField2_nombre;
+    private javax.swing.JTextField jTextField3_segundo_apellido;
+    private javax.swing.JTextField jTextField4_primer_apellido;
+    private javax.swing.JTextField jTextField5_contrasenia;
+    private javax.swing.JTextField jTextField6_repite_contrasenia;
     // End of variables declaration//GEN-END:variables
 }
