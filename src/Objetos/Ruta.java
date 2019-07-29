@@ -18,12 +18,18 @@ public class Ruta {
     //Boolean que enmarca si la ruta esta habilitada o deshabilitada.
     private boolean habilidato;
 
+    //ToString para mostrar en jList
+    @Override
+    public String toString() {
+        return getNombreRuta();
+    }
+
     //Constructor vacio.
     public Ruta() {
     }
 
     //Constructor para dar las variables
-    public Ruta(int DB_ID, int costo, String descripcion_ruta, String lugar_salida, String lugar_llegada, String hora_salida, String hora_llegada, boolean habilidato) {
+    public Ruta(int DB_ID, int costo, String descripcion_ruta, String lugar_salida, String lugar_llegada, String hora_salida, String hora_llegada, boolean habilidato, String nombre_ruta) {
         this.DB_ID = DB_ID;
         this.costo = costo;
         this.descripcion_ruta = descripcion_ruta;
@@ -97,6 +103,10 @@ public class Ruta {
 
     public void setHabilidato(boolean habilidato) {
         this.habilidato = habilidato;
+    }
+
+    public String getNombreRuta() {
+        return this.lugar_salida + "-" + this.lugar_llegada;
     }
 
 }

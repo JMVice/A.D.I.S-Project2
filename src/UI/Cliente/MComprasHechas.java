@@ -1,12 +1,67 @@
 package UI.Cliente;
 
+import Logica.AES;
 import Logica.Memoria;
+import Logica.QRModule;
+import Objetos.Ruta;
+import Objetos.Ticket;
+
+import java.util.LinkedList;
+import javax.swing.DefaultListModel;
 
 public class MComprasHechas extends javax.swing.JFrame {
+
+    private LinkedList<Ticket> lista_tickets = new LinkedList<Ticket>();
+    private DefaultListModel<Ticket> modelo_tickets = new DefaultListModel<>();
+    private LinkedList<Ruta> lista_rutas = new LinkedList<Ruta>();
+    private QRModule qr = new QRModule();
 
     public MComprasHechas() {
         initComponents();
         settings();
+        cargar_rutas();
+        cargar_tickets();
+        rellenar_lista_tickets();
+        panel_resumen_settings();
+    }
+
+    private void panel_resumen_settings() {
+        //Hace un salto de linea si el texto llega al final de la derecha
+        jTextArea_panel_resumen.setLineWrap(true);
+        //posiciona el scroll vertical hasta arriba
+        jTextArea_panel_resumen.setCaretPosition(0);
+        //Hace un salto de linea si el texto llega al final de la derecha
+        jTextArea_panel_resumen.setWrapStyleWord(true);
+    }
+
+    private void cargar_tickets() {
+        // Consulta al SQL que carga los tickets
+        this.lista_tickets = Memoria.sql_lite_query.obtener_tickets("SELECT * FROM TICKET");
+        for (int i = 0; i < lista_tickets.size(); i++) {
+            // Si el ID de una ruta es el mismo al cual pertence la ruta del ticket se le asigna esa ruta al ticket 
+            // por que el nombre del ticket se basa en el punto de partida y llegada guardado en el objeto de tipo ruta
+            for (Ruta r : this.lista_rutas) {               
+                if (lista_tickets.get(i).getRutaID() == r.getDB_ID()) {
+                    lista_tickets.get(i).setRuta(r);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void rellenar_lista_tickets() {
+        //Muestra solomaente los tickets del usuario que esta en loggeado
+        this.modelo_tickets.clear();
+        for (Ticket t : this.lista_tickets) {
+            if (t.getClienteID() == Memoria.usuario_actual.getDB_ID()) {
+                this.modelo_tickets.add(0, t);
+            }
+        }
+        this.jList_tickets.setModel(this.modelo_tickets);
+    }
+
+    private void cargar_rutas() {
+        this.lista_rutas = Memoria.sql_lite_query.obtener_rutas("SELECT * FROM RUTA");
     }
 
     private void settings() {
@@ -30,10 +85,10 @@ public class MComprasHechas extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        jList_tickets = new javax.swing.JList<>();
         jButton1_volver = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextArea_panel_resumen = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         jLabel1_qr = new javax.swing.JLabel();
 
@@ -45,12 +100,12 @@ public class MComprasHechas extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Historial de compras");
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "989C933 - Ruta SanJose-Alajuela", "995F113 - Ruta Alajuela-SanJose", "911K492 - Ruta SanJose-Cartago", "483L344 - Ruta Cartago-SanJose", "129X842 - Ruta SanJose-Heredia", "499O593 - Ruta Heredia-SanJose", "829A445 - Ruta SanJose-Limon", "819P483 - Ruta Limon-SanJose" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jList_tickets.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList_ticketsMouseClicked(evt);
+            }
         });
-        jScrollPane3.setViewportView(jList2);
+        jScrollPane3.setViewportView(jList_tickets);
 
         jButton1_volver.setText("Volver");
         jButton1_volver.addActionListener(new java.awt.event.ActionListener() {
@@ -59,15 +114,12 @@ public class MComprasHechas extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Viaje SanJose-Alajuela\n\nCodigo: 989C933\n\nFecha de caducidad: 2019/12/22\n\nValido para 1 pasajero.\n\nUtilizado: No");
-        jScrollPane1.setViewportView(jTextArea1);
+        jTextArea_panel_resumen.setColumns(20);
+        jTextArea_panel_resumen.setRows(5);
+        jScrollPane1.setViewportView(jTextArea_panel_resumen);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Código QR:");
-
-        jLabel1_qr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/qr_example.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,37 +128,43 @@ public class MComprasHechas extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1_volver)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)))
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel1_qr))))
-                .addGap(18, 18, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 13, Short.MAX_VALUE))
+                            .addComponent(jLabel1_qr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jButton1_volver))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1))
-                    .addComponent(jLabel1_qr))
-                .addGap(18, 18, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1_qr, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addComponent(jButton1_volver)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -115,21 +173,62 @@ public class MComprasHechas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1_volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_volverActionPerformed
-         MNavCliente mNavCliente = new MNavCliente();
+        //Boton de volver
+        MNavCliente mNavCliente = new MNavCliente();
         this.dispose();
     }//GEN-LAST:event_jButton1_volverActionPerformed
 
+    private void jList_ticketsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList_ticketsMouseClicked
+        //Muestr la informacion del tiquet en el panel
+        Ticket t = jList_tickets.getSelectedValue();
+        String resumen = "";
+        if (t != null) {
+            String utilizado = "";
+           // si el tiquete fue utilizado muestra un mensaje
+           // si no fue utilizado muestra la información del tiquete
+            if (t.isUtilizado()) {
+                utilizado = "El tickete ha sido utilizado...";
+            } else {
+                utilizado = "No";
+            }
+            resumen = "Viaje " + t.getRuta().getLugar_salida() + "-" + t.getRuta().getLugar_llegada() + "\n"
+                    + "\n"
+                    + "Codigo: " + AES.decrypt(t.getCodigo(), Memoria.DBKeyPassword) + "\n"
+                    + "\n"
+                    + "Fecha de caducidad: " + t.getFecha_caducidad() + "\n"
+                    + "\n"
+                    + "Utilizado: " + utilizado
+                    + "\n"
+                    + "\n"
+                    + "Descripción de la ruta: \n" + obtener_descripcion_ruta(t.getRutaID());
+            jLabel1_qr.setIcon(this.qr.generar_imagen_qr(AES.decrypt(t.getCodigo(), Memoria.DBKeyPassword)));
+        }
+        jTextArea_panel_resumen.setText(resumen);
+    }//GEN-LAST:event_jList_ticketsMouseClicked
+
+    private String obtener_descripcion_ruta(int ruta_id) {
+      //muestra la descripcion de la ruta
+        String mensaje = "";
+        for (Ruta r : this.lista_rutas) {
+            if (r.getDB_ID() == ruta_id) {
+                mensaje = r.getDescripcion_ruta();
+            }
+        }
+        return mensaje;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1_volver;
@@ -137,10 +236,10 @@ public class MComprasHechas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JList<String> jList2;
+    private javax.swing.JList<Ticket> jList_tickets;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea_panel_resumen;
     // End of variables declaration//GEN-END:variables
 }

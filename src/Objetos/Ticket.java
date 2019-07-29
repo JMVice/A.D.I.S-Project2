@@ -1,5 +1,9 @@
 package Objetos;
 
+import Logica.AES;
+import Logica.Memoria;
+import java.util.LinkedList;
+
 public class Ticket {
 
     //Las variables se ajustan a todas sus equivalentes a las de la base de 
@@ -12,27 +16,34 @@ public class Ticket {
     private int RutaID;
     //Codigo del ticket. Se refiere al codigo unico que genera el sistema.
     private String Codigo;
-    //Guarda el numero de pasajeros que el ticket permite.
-    private int pasajeros;
     private String Fecha_caducidad;
     //Este boolean establece si el ticket ya ha sido utilizado o no.
     private boolean utilizado;
+    //Guarda el objeto de tipo Ruta correspondiete al ticket en caso de necesitar
+    //su información
+    private Ruta ruta;
 
     //Constructor vacio
     public Ticket() {
     }
 
     //Constructor para establecer las variables
-    public Ticket(int DB_ID, int ClienteID, int RutaID, String Codigo, int pasajeros, String Fecha_caducidad, boolean utilizado) {
+    public Ticket(int DB_ID, int ClienteID, int RutaID, String Codigo, String Fecha_caducidad, boolean utilizado, Ruta ruta) {
         this.DB_ID = DB_ID;
         this.ClienteID = ClienteID;
         this.RutaID = RutaID;
         this.Codigo = Codigo;
-        this.pasajeros = pasajeros;
         this.Fecha_caducidad = Fecha_caducidad;
         this.utilizado = utilizado;
+        this.ruta = ruta;
     }
 
+    @Override
+    public String toString() {
+        return AES.decrypt(this.Codigo, Memoria.DBKeyPassword) + " - Ruta: " + this.ruta.getLugar_salida() + " - " + this.ruta.getLugar_llegada();
+    }
+
+    //num - Ruta X-Y
     //Seccion de get y set
     public int getClienteID() {
         return ClienteID;
@@ -40,14 +51,6 @@ public class Ticket {
 
     public void setClienteID(int ClienteID) {
         this.ClienteID = ClienteID;
-    }
-
-    public int getPasajeros() {
-        return pasajeros;
-    }
-
-    public void setPasajeros(int pasajeros) {
-        this.pasajeros = pasajeros;
     }
 
     public int getDB_ID() {
@@ -88,6 +91,14 @@ public class Ticket {
 
     public void setUtilizado(boolean utilizado) {
         this.utilizado = utilizado;
+    }
+
+    public Ruta getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(Ruta ruta) {
+        this.ruta = ruta;
     }
 
 }

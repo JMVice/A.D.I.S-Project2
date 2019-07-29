@@ -30,6 +30,13 @@ public class Usuario {
         this.habilitado = habilitado;
     }
 
+    @Override
+    public String toString() {
+        return this.nombre_de_usuario + " ." + this.Rol ;
+    }
+    
+    
+
     //Seccion de get y set
     public int getDB_ID() {
         return DB_ID;

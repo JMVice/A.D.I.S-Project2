@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -32,8 +36,8 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="jPanel1" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -44,28 +48,33 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButton2" min="-2" pref="176" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-              </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="204" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                          <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jButton13_log_out" min="-2" max="-2" attributes="0"/>
-                              <Component id="jToggleButton1" min="-2" pref="359" max="-2" attributes="0"/>
+                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jButton_pago_validar" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jRadioButton_pago_manual" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                              <Component id="jRadioButton_pago_por_ticket" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace min="0" pref="34" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="212" max="-2" attributes="0"/>
+                          <Component id="jLabel_status" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton13_log_out" min="-2" pref="175" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
@@ -81,7 +90,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel_nombre_ruta" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
@@ -89,50 +98,50 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                              <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel_costo" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="jSpinner1" min="-2" pref="62" max="-2" attributes="0"/>
+                                              <Component id="jSpinner_pasajeros" min="-2" pref="62" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel_total_a_pagar" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jButton4" min="-2" pref="50" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jButton5" min="-2" pref="50" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jButton6" min="-2" pref="50" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jButton7" min="-2" pref="50" max="-2" attributes="0"/>
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Component id="jButton1" min="-2" pref="50" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jButton3" min="-2" pref="50" max="-2" attributes="0"/>
+                                                  <Component id="jButton2" min="-2" pref="50" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jButton4" min="-2" pref="50" max="-2" attributes="0"/>
+                                                  <Component id="jButton3" min="-2" pref="50" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jButton8" min="-2" pref="50" max="-2" attributes="0"/>
+                                              <Component id="jButton7" min="-2" pref="50" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jButton11" min="-2" pref="50" max="-2" attributes="0"/>
+                                                      <Component id="jButton0" min="-2" pref="50" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton12" min="-2" pref="50" max="-2" attributes="0"/>
+                                                      <Component id="jButton_C" min="-2" pref="50" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jButton9" min="-2" pref="50" max="-2" attributes="0"/>
+                                                      <Component id="jButton8" min="-2" pref="50" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton10" min="-2" pref="50" max="-2" attributes="0"/>
+                                                      <Component id="jButton9" min="-2" pref="50" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -142,7 +151,7 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
-                              <Component id="jTextField3" min="-2" pref="162" max="-2" attributes="0"/>
+                              <Component id="jTextField_panel_de_digitacion" min="-2" pref="162" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="46" max="32767" attributes="0"/>
@@ -153,18 +162,19 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace pref="250" max="32767" attributes="0"/>
+                  <EmptySpace pref="256" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jRadioButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jRadioButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButton_pago_manual" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButton_pago_por_ticket" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
-                  <Component id="jToggleButton1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton13_log_out" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                  <Component id="jButton_pago_validar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="jLabel_status" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jButton13_log_out" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
@@ -180,7 +190,7 @@
                               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel_nombre_ruta" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -191,51 +201,50 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel_costo" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jSpinner_pasajeros" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel_total_a_pagar" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButton8" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="jButton9" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton10" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jButton11" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton12" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jButton0" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jButton_C" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                              <Component id="jTextField3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jTextField_panel_de_digitacion" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane1" alignment="0" min="-2" pref="369" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="36" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -253,12 +262,23 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton3">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="24" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="3"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
@@ -269,7 +289,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="3"/>
+            <Property name="text" type="java.lang.String" value="4"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
@@ -280,7 +300,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="4"/>
+            <Property name="text" type="java.lang.String" value="5"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
@@ -291,7 +311,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="5"/>
+            <Property name="text" type="java.lang.String" value="6"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
@@ -302,7 +322,8 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="6"/>
+            <Property name="text" type="java.lang.String" value="7"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
@@ -313,8 +334,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="7"/>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="text" type="java.lang.String" value="8"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton8ActionPerformed"/>
@@ -325,22 +345,11 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="8"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton10">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="24" style="0"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="9"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton10ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -359,25 +368,19 @@
             <Property name="text" type="java.lang.String" value="Ruta:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="jLabel_nombre_ruta">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="LOREM RUTA"/>
+            <Property name="text" type="java.lang.String" value="sin ruta seleccionada"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Pagar / Validar"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jTextField3">
+        <Component class="javax.swing.JTextField" name="jTextField_panel_de_digitacion">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="$3.50 / 325E4543"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -387,37 +390,17 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="jList1">
+            <Component class="javax.swing.JList" name="jList_rutas">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="22">
-                    <StringItem index="0" value="Ruta SanJose-Alajuela"/>
-                    <StringItem index="1" value="Ruta Alajuela-SanJose"/>
-                    <StringItem index="2" value="Ruta SanJose-Cartago"/>
-                    <StringItem index="3" value="Ruta Cartago-SanJose"/>
-                    <StringItem index="4" value="Ruta SanJose-Heredia"/>
-                    <StringItem index="5" value="Ruta Heredia-SanJose"/>
-                    <StringItem index="6" value="Ruta SanJose-Limon"/>
-                    <StringItem index="7" value="Ruta Limon-SanJose"/>
-                    <StringItem index="8" value="Ruta SanJose-Guanacaste"/>
-                    <StringItem index="9" value="Ruta Guanacaste-SanJose"/>
-                    <StringItem index="10" value="Ruta SanJose-Puntarenas"/>
-                    <StringItem index="11" value="Ruta Puntarenas-SanJose"/>
-                    <StringItem index="12" value="Ruta SanJose-Puriscal"/>
-                    <StringItem index="13" value="Ruta Puriscal-SanJose"/>
-                    <StringItem index="14" value="Ruta SanJose-Curridabat"/>
-                    <StringItem index="15" value="Ruta Curridabat-SanJose"/>
-                    <StringItem index="16" value="Ruta SanJose-Desamparados"/>
-                    <StringItem index="17" value="Ruta Desamparados-SanJose"/>
-                    <StringItem index="18" value="Ruta SanJose-Moravia"/>
-                    <StringItem index="19" value="Ruta Moravia-SanJose"/>
-                    <StringItem index="20" value="Ruta SanJose-SanRamon"/>
-                    <StringItem index="21" value="Ruta SanRamon-SanJose"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jList_rutasMouseClicked"/>
+              </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Ruta&gt;"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -446,21 +429,27 @@
             <Property name="text" type="java.lang.String" value="Pasajeros:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel13">
+        <Component class="javax.swing.JLabel" name="jLabel_costo">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="$1.5"/>
+            <Property name="text" type="java.lang.String" value="&#x20a1;:"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="jSpinner1">
+        <Component class="javax.swing.JSpinner" name="jSpinner_pasajeros">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
+            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+              <SpinnerModel initial="1" maximum="60" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
+            </Property>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinner_pasajerosStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
@@ -470,21 +459,16 @@
             <Property name="text" type="java.lang.String" value="Total:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel15">
+        <Component class="javax.swing.JLabel" name="jLabel_total_a_pagar">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="$1.5"/>
+            <Property name="text" type="java.lang.String" value="&#x20a1;:"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Seleccionar ruta"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton11">
+        <Component class="javax.swing.JButton" name="jButton0">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
@@ -493,36 +477,48 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton11ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton0ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton12">
+        <Component class="javax.swing.JButton" name="jButton_C">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="x"/>
+            <Property name="text" type="java.lang.String" value="C"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton12ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_CActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="jRadioButton1">
+        <Component class="javax.swing.JRadioButton" name="jRadioButton_pago_manual">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pago manual"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton_pago_manualActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+        <Component class="javax.swing.JRadioButton" name="jRadioButton_pago_por_ticket">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pago por ticket"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton_pago_por_ticketActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton13_log_out">
           <Properties>
@@ -531,6 +527,26 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton13_log_outActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton_pago_validar">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Pagar/Validar"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_pago_validarActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel4">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Colones/ticket"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel_status">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="12" style="1"/>
+            </Property>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

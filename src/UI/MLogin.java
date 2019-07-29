@@ -118,8 +118,8 @@ public class MLogin extends javax.swing.JFrame {
                         .addGap(117, 117, 117)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton_registrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3_status))))
+                            .addComponent(jLabel3_status)
+                            .addComponent(jButton_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(104, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -161,17 +161,24 @@ public class MLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_log_inActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_log_inActionPerformed
+        //Boton que ejecuta el inicio de sesion
         iniciar_sesion();
     }//GEN-LAST:event_jButton_log_inActionPerformed
 
+    //Inicia seción, valida usuario y contraseña
     private void iniciar_sesion() {
+        // Condición que valida que se haya ingresado la información de usuario y contraseña 
         if (!new String(jPasswordField1.getPassword()).equals("") && !jTextField1_nombre_usuario.getText().equals("")) {
+            // Llama a la usuario dentro de la base de datos
             this.lista_usuarios = Memoria.sql_lite_query.obtener_usuarios("SELECT * FROM USER");
             if (!this.lista_usuarios.isEmpty()) {
+                //Validación que el usuario exista
                 for (Usuario u : this.lista_usuarios) {
+                    // Se valida que la contraseña sea correcta y el nombre de usuario
                     if (AES.decrypt(u.getContrasenia(), Memoria.DBKeyPassword).equals(new String(jPasswordField1.getPassword()))
                             && u.getNombre_de_usuario().equals(jTextField1_nombre_usuario.getText())) {
                         Memoria.usuario_actual = u;
+                        //Abre nuevo menu de navegación dependiendo del rol
                         switch (u.getRol()) {
                             case "admin":
                                 MNavAdmin mNavAdmin = new MNavAdmin();
@@ -185,12 +192,17 @@ public class MLogin extends javax.swing.JFrame {
                                 MChofer mChofer = new MChofer();
                                 this.dispose();
                                 break;
+                            case "masteradmin":
+                                MNavAdmin mNavAdmin2 = new MNavAdmin();
+                                this.dispose();
+                                break;
                             default:
                                 throw new AssertionError();
                         }
                         break;
                     }
                 }
+                //mensajes a mostrar dependiendo del error
                 label_status_change("El usuario o la contraseña no es correcta.", "red");
             } else {
                 System.out.println("sin usuarios");
@@ -202,11 +214,13 @@ public class MLogin extends javax.swing.JFrame {
     }
 
     private void jButton_registrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_registrarseActionPerformed
+        // Abre ventana de registro 
         MRegistro mRegistro = new MRegistro();
         this.dispose();
     }//GEN-LAST:event_jButton_registrarseActionPerformed
 
     private void jPasswordField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyTyped
+        // Inicia sesion presionando enter
         char c = evt.getKeyChar();
         if (c == KeyEvent.VK_ENTER) {
             iniciar_sesion();
@@ -214,12 +228,14 @@ public class MLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1KeyTyped
 
     private void jTextField1_nombre_usuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1_nombre_usuarioKeyTyped
+        // Inicia sesion presionando enter
         char c = evt.getKeyChar();
         if (c == KeyEvent.VK_ENTER) {
             iniciar_sesion();
         }
     }//GEN-LAST:event_jTextField1_nombre_usuarioKeyTyped
 
+    //Mensaje que se muestra de error en caso de haberlos en el momento de log in 
     private void label_status_change(String message, String color) {
         switch (color) {
             case "red":

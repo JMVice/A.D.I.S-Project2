@@ -1,5 +1,8 @@
 package Objetos;
 
+import Logica.AES;
+import Logica.Memoria;
+
 public class Tarjeta {
 
     //Las variables se ajustan a todas sus equivalentes a las de la base de 
@@ -11,14 +14,19 @@ public class Tarjeta {
     private String Num_tarjeta;
     private String CVV;
     private String Fecha_caducidad;
-    private String Saldo;
+    private int Saldo;
 
     //Constructor vacio.
     public Tarjeta() {
     }
 
+    @Override
+    public String toString() {
+        return AES.decrypt(this.Num_tarjeta, Memoria.DBKeyPassword);
+    }
+
     //Constructor para dar todas las variables.
-    public Tarjeta(int DB_ID, int ClienteID, String Num_tarjeta, String CVV, String Fecha_caducidad, String Saldo) {
+    public Tarjeta(int DB_ID, int ClienteID, String Num_tarjeta, String CVV, String Fecha_caducidad, int Saldo) {
         this.DB_ID = DB_ID;
         this.ClienteID = ClienteID;
         this.Num_tarjeta = Num_tarjeta;
@@ -68,11 +76,11 @@ public class Tarjeta {
         this.Fecha_caducidad = Fecha_caducidad;
     }
 
-    public String getSaldo() {
+    public int getSaldo() {
         return Saldo;
     }
 
-    public void setSaldo(String Saldo) {
+    public void setSaldo(int Saldo) {
         this.Saldo = Saldo;
     }
 

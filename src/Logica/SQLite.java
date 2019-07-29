@@ -1,5 +1,8 @@
 package Logica;
 
+import Objetos.Ruta;
+import Objetos.Tarjeta;
+import Objetos.Ticket;
 import Objetos.Usuario;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -30,15 +33,15 @@ public class SQLite {
 
     //Metodo para consultas tipo InsertInto o Delete
     //Se coloca la query en la sobrecarga del metodo
-    public void Query(String query) {
+    public void Query(String query, String query_description) {
         try {
             this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
             Statement stmt = this.con.createStatement();
             stmt.executeQuery(query);
         } catch (SQLException e) {
-            //e.printStackTrace();
+//         e.printStackTrace();
         } finally {
-            System.out.println("Query finished");
+            System.out.println(query_description);
             Close_connection();
         }
     }
@@ -75,7 +78,7 @@ public class SQLite {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         } finally {
             System.out.println("Query finished");
@@ -98,18 +101,116 @@ public class SQLite {
                 u.setNombre(rs.getString("Nombre"));
                 u.setAp_paterno(rs.getString("Ap_paterno"));
                 u.setAp_materno(rs.getString("Ap_materno"));
-                u.setHabilitado(rs.getBoolean("Habilitado"));
+                String habilidato_str = rs.getString("Habilitado");
+                if (habilidato_str.equals("true")) {
+                    u.setHabilitado(true);
+                } else {
+                    u.setHabilitado(false);
+                }
                 lista_usuarios.add(u);
                 u = new Usuario();
+            }
+        } catch (SQLException e) {
+//            e.printStackTrace();
+            return null;
+        } finally {
+            System.out.println("Usuarios consultados");
+            Close_connection();
+        }
+        return lista_usuarios;
+    }
+
+    public LinkedList<Tarjeta> obtener_tarjetas(String query) {
+        LinkedList<Tarjeta> lista_tarjetas = new LinkedList<Tarjeta>();
+        Tarjeta t = new Tarjeta();
+        try {
+            this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
+            Statement stmt = this.con.createStatement();
+            this.rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                t.setCVV(AES.decrypt(rs.getString("CVV"), Memoria.DBKeyPassword));
+                t.setClienteID(rs.getInt("UserID"));
+                t.setDB_ID(rs.getInt("TarjetaID"));
+                t.setFecha_caducidad(rs.getString("Fecha_caducidad"));
+                t.setNum_tarjeta(rs.getString("Num_tarjeta"));
+                t.setSaldo(rs.getInt("Saldo"));
+                lista_tarjetas.add(t);
+                t = new Tarjeta();
+            }
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return null;
+        } finally {
+            System.out.println("Tarjetas consultadas");
+            Close_connection();
+            return lista_tarjetas;
+        }
+    }
+
+    public LinkedList<Ruta> obtener_rutas(String query) {
+        LinkedList<Ruta> lista_rutas = new LinkedList<Ruta>();
+        try {
+            Ruta r = new Ruta();
+            this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
+            Statement stmt = this.con.createStatement();
+            this.rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                r.setDB_ID(rs.getInt("RutaID"));
+                r.setCosto(rs.getInt("Costo"));
+                r.setDescripcion_ruta(rs.getString("Descripcion_ruta"));
+                r.setLugar_salida(rs.getString("Lugar_salida"));
+                r.setLugar_llegada(rs.getString("Lugar_llegada"));
+                r.setHora_salida(rs.getString("Hora_salida"));
+                r.setHora_llegada(rs.getString("Hora_llegada"));
+                String status = rs.getString("Habilitado");
+                if (status.equals("true")) {
+                    r.setHabilidato(true);
+                } else {
+                    r.setHabilidato(false);
+                }
+                lista_rutas.add(r);
+                r = new Ruta();
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         } finally {
-            System.out.println("Query finished");
+            System.out.println("Rutas consultadas");
             Close_connection();
         }
-        return lista_usuarios;
+        return lista_rutas;
+    }
+
+    public LinkedList<Ticket> obtener_tickets(String query) {
+        LinkedList<Ticket> lista_tickets = new LinkedList<Ticket>();
+        try {
+            Ticket t = new Ticket();
+            this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
+            Statement stmt = this.con.createStatement();
+            this.rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                t.setDB_ID(rs.getInt("TicketID"));
+                t.setClienteID(rs.getInt("UserID"));
+                t.setCodigo(rs.getString("Codigo"));
+                t.setFecha_caducidad(rs.getString("Fecha_caducidad"));
+                t.setRutaID(rs.getInt("RutaID"));
+                String utilizado = rs.getString("Utilizado");
+                if (utilizado.equals("true")) {
+                    t.setUtilizado(true);
+                } else {
+                    t.setUtilizado(false);
+                }
+                lista_tickets.add(t);
+                t = new Ticket();
+            }
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            return null;
+        } finally {
+            System.out.println("Tickets consultados");
+            Close_connection();
+        }
+        return lista_tickets;
     }
 
     //Metodos de plantilla
@@ -154,7 +255,7 @@ public class SQLite {
     private void Close_connection() {
         try {
             this.con.close();
-            System.out.println("SQL connection closed");
+//            System.out.println("SQL connection closed");
         } catch (SQLException ex) {
             Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, null, ex);
         }

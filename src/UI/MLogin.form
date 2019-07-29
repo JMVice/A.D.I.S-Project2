@@ -67,8 +67,8 @@
                           <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jButton_registrarse" min="-2" pref="257" max="-2" attributes="0"/>
-                              <Component id="jButton_log_in" min="-2" pref="257" max="-2" attributes="0"/>
                               <Component id="jLabel3_status" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButton_log_in" alignment="0" min="-2" pref="257" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

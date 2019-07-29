@@ -4,14 +4,15 @@ import Logica.AES;
 import Logica.Memoria;
 import Objetos.Usuario;
 import UI.MLogin;
+import java.util.LinkedList;
 
 public class MRegistro extends javax.swing.JFrame {
-    
+
     public MRegistro() {
         initComponents();
         settings();
     }
-    
+
     private void settings() {
         //Establece el icono en la barra de estado y en el icono.
         setIconImage(Memoria.getIconImage());
@@ -24,7 +25,7 @@ public class MRegistro extends javax.swing.JFrame {
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -167,14 +168,15 @@ public class MRegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1_cancelarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Usuario u = new Usuario();
-        u.setRol("cliente");
-        u.setNombre_de_usuario(jTextField1_nombre_de_usuario.getText());
-        u.setContrasenia(AES.encrypt(jTextField5_contrasenia.getText(), Memoria.DBKeyPassword));
-        u.setNombre(jTextField2_nombre.getText());
-        u.setAp_paterno(jTextField4_primer_apellido.getText());
-        u.setAp_materno(jTextField3_segundo_apellido.getText());
-        u.setHabilitado(true);
+        Usuario usuario_nuevo = new Usuario();
+        usuario_nuevo.setRol("cliente");
+        usuario_nuevo.setNombre_de_usuario(jTextField1_nombre_de_usuario.getText());
+        usuario_nuevo.setContrasenia(AES.encrypt(jTextField5_contrasenia.getText(), Memoria.DBKeyPassword));
+        usuario_nuevo.setNombre(jTextField2_nombre.getText());
+        usuario_nuevo.setAp_paterno(jTextField4_primer_apellido.getText());
+        usuario_nuevo.setAp_materno(jTextField3_segundo_apellido.getText());
+        usuario_nuevo.setHabilitado(true);
+        //Consulta para ingreso de nuevo usuario a la base de datos
         Memoria.sql_lite_query.Query("INSERT INTO USER (Rol, "
                 + "Nombre_usuario, "
                 + "Contrasenia, "
@@ -182,15 +184,24 @@ public class MRegistro extends javax.swing.JFrame {
                 + "Ap_paterno, "
                 + "Ap_materno, "
                 + "Habilitado)\n"
-                + "VALUES ('" + u.getRol() + "', "
-                + "'" + u.getNombre_de_usuario() + "', "
-                + "'" + u.getContrasenia() + "', "
-                + "'" + u.getNombre() + "',"
-                + "'" + u.getAp_paterno() + "',"
-                + "'" + u.getAp_materno() + "',"
-                + "'" + u.isHabilitado() + "');");
-        Memoria.usuario_actual = u;
+                + "VALUES ('" + usuario_nuevo.getRol() + "', "
+                + "'" + usuario_nuevo.getNombre_de_usuario() + "', "
+                + "'" + usuario_nuevo.getContrasenia() + "', "
+                + "'" + usuario_nuevo.getNombre() + "',"
+                + "'" + usuario_nuevo.getAp_paterno() + "',"
+                + "'" + usuario_nuevo.getAp_materno() + "',"
+                + "'" + usuario_nuevo.isHabilitado() + "');","Usuario registrado");
+    //Redireccionamiento de usuario a menu principal una vez creada la cuenta en el proceso de registro. Dispose the ventana de registro.
+        LinkedList<Usuario> lista_usuarios_temporal = new LinkedList<Usuario>();
+        lista_usuarios_temporal = Memoria.sql_lite_query.obtener_usuarios("SELECT * FROM USER");
+        for (Usuario usuario_temporal : lista_usuarios_temporal) {
+            if (usuario_temporal.getNombre_de_usuario().equals(usuario_nuevo.getNombre_de_usuario())
+                    && AES.decrypt(usuario_temporal.getContrasenia(), Memoria.DBKeyPassword).equals(AES.decrypt(usuario_nuevo.getContrasenia(), Memoria.DBKeyPassword))) {
+                Memoria.usuario_actual = usuario_temporal;
+            }
+        }
         MNavCliente mNavCliente = new MNavCliente();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
