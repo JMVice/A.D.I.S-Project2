@@ -3,7 +3,7 @@ package UI.Cliente;
 import Logica.AES;
 import Logica.Memoria;
 import Logica.Run;
-import Objetos.Fecha;
+import Logica.Fecha;
 import Objetos.Tarjeta;
 import java.awt.Color;
 import java.awt.event.KeyEvent;

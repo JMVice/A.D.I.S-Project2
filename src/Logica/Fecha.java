@@ -1,4 +1,4 @@
-package Objetos;
+package Logica;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
