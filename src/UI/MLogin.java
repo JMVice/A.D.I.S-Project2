@@ -176,7 +176,7 @@ public class MLogin extends javax.swing.JFrame {
                 for (Usuario u : this.lista_usuarios) {
                     // Se valida que la contraseña sea correcta y el nombre de usuario
                     if (AES.decrypt(u.getContrasenia(), Memoria.DBKeyPassword).equals(new String(jPasswordField1.getPassword()))
-                            && u.getNombre_de_usuario().equals(jTextField1_nombre_usuario.getText())) {
+                            && u.getNombre_de_usuario().equals(jTextField1_nombre_usuario.getText().toLowerCase())) {
                         Memoria.usuario_actual = u;
                         //Abre nuevo menu de navegación dependiendo del rol
                         switch (u.getRol()) {
