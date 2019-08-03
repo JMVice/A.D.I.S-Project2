@@ -1,5 +1,7 @@
 package Logica;
 
+import Objetos.Fecha;
+import UI.Cliente.MMetodoPago;
 import UI.MLogin;
 import javax.swing.JOptionPane;
 

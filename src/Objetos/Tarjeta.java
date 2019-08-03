@@ -5,6 +5,9 @@ import Logica.Memoria;
 
 public class Tarjeta {
 
+    //NOTA: Las tarjetas VISA siempre comienzan con el numero 4.
+    //Las tarjetas MasterCard siempre comienzan con el numero 5.
+    //La longitud de cualquier tarjeta es siempre de 16 digitos.
     //Las variables se ajustan a todas sus equivalentes a las de la base de 
     //datos.
     private int DB_ID;
@@ -22,7 +25,19 @@ public class Tarjeta {
 
     @Override
     public String toString() {
-        return AES.decrypt(this.Num_tarjeta, Memoria.DBKeyPassword);
+        //Usamos stringbuilder para eliminar los todos los numeros de la tarjeta hasta tener sólo 4.
+        StringBuilder sb = new StringBuilder(AES.decrypt(this.Num_tarjeta, Memoria.DBKeyPassword));
+        String tipo_tarjeta = "VISA";
+        //Si el numero de tarjeta es 5 se setea como MasterCard.
+        if (sb.charAt(0) == '5') {
+            tipo_tarjeta = "MasterCard";
+        }
+        //Borra los primeros 12 numeros
+        for (int i = 0; i < 12; i++) {
+            sb.deleteCharAt(0);
+        }
+        //Regresa el formato de string como xxxxNNNN. Visa/MasterCard
+        return "xxxx" + sb.toString() + ". " + tipo_tarjeta;
     }
 
     //Constructor para dar todas las variables.
