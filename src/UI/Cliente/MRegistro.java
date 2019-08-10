@@ -47,11 +47,11 @@ public class MRegistro extends javax.swing.JFrame {
         jTextField2_nombre = new javax.swing.JTextField();
         jTextField3_segundo_apellido = new javax.swing.JTextField();
         jTextField4_primer_apellido = new javax.swing.JTextField();
-        jTextField5_contrasenia = new javax.swing.JTextField();
-        jTextField6_repite_contrasenia = new javax.swing.JTextField();
         jButton1_cancelar = new javax.swing.JButton();
         jButton_crear_cuenta = new javax.swing.JButton();
         jLabel3_status = new javax.swing.JLabel();
+        jPasswordField_contrasenia1 = new javax.swing.JPasswordField();
+        jPasswordField_contrasenia2 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,13 +103,13 @@ public class MRegistro extends javax.swing.JFrame {
                             .addComponent(jButton1_cancelar))
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField6_repite_contrasenia)
-                            .addComponent(jTextField5_contrasenia)
                             .addComponent(jTextField3_segundo_apellido)
                             .addComponent(jTextField2_nombre)
                             .addComponent(jTextField1_nombre_de_usuario)
                             .addComponent(jTextField4_primer_apellido)
-                            .addComponent(jButton_crear_cuenta, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                            .addComponent(jButton_crear_cuenta, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                            .addComponent(jPasswordField_contrasenia1)
+                            .addComponent(jPasswordField_contrasenia2)))
                     .addComponent(jLabel3_status))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -137,18 +137,18 @@ public class MRegistro extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField5_contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField_contrasenia1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField6_repite_contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField_contrasenia2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1_cancelar)
                     .addComponent(jButton_crear_cuenta))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3_status)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -177,10 +177,22 @@ public class MRegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1_cancelarActionPerformed
 
     private void jButton_crear_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_crear_cuentaActionPerformed
-        if (sin_espacios_vacios() && las_contrasenias_coinciden() && usuario_no_repetido()) {
+        if (usuario_no_repetido()
+                && sin_espacios_vacios()
+                && ecstencion_de_contrasenia_correcta()
+                && las_contrasenias_coinciden()) {
             crear_cuenta();
         }
     }//GEN-LAST:event_jButton_crear_cuentaActionPerformed
+
+    private boolean ecstencion_de_contrasenia_correcta() {
+        if (new String(this.jPasswordField_contrasenia1.getPassword()).length() >= 6) {
+            return true;
+        } else {
+            label_status_change("La contraseña debe ser de al menos 6 caracteres.", "red");
+            return false;
+        }
+    }
 
     private boolean sin_espacios_vacios() {
         //Verifica que todos los espacios tengan algo escrito
@@ -188,8 +200,8 @@ public class MRegistro extends javax.swing.JFrame {
                 && !jTextField2_nombre.getText().equals("")
                 && !jTextField3_segundo_apellido.getText().equals("")
                 && !jTextField4_primer_apellido.getText().equals("")
-                && !jTextField5_contrasenia.getText().equals("")
-                && !jTextField6_repite_contrasenia.getText().equals("")) {
+                && !new String(this.jPasswordField_contrasenia1.getPassword()).equals("")
+                && !new String(this.jPasswordField_contrasenia2.getPassword()).equals("")) {
             return true;
         } else {
             label_status_change("Debe rellenar todos los espacios!", "red");
@@ -199,7 +211,7 @@ public class MRegistro extends javax.swing.JFrame {
 
     private boolean las_contrasenias_coinciden() {
         //Verifica que los 2 espacios de contrasenia coincidan
-        if (jTextField5_contrasenia.getText().equals(jTextField6_repite_contrasenia.getText())) {
+        if (new String(this.jPasswordField_contrasenia1.getPassword()).equals(new String(this.jPasswordField_contrasenia2.getPassword()))) {
             return true;
         } else {
             label_status_change("Las contraseñas no coinciden!", "red");
@@ -249,7 +261,7 @@ public class MRegistro extends javax.swing.JFrame {
         Usuario usuario_nuevo = new Usuario();
         usuario_nuevo.setRol("cliente");
         usuario_nuevo.setNombre_de_usuario(jTextField1_nombre_de_usuario.getText().toLowerCase());
-        usuario_nuevo.setContrasenia(AES.encrypt(jTextField5_contrasenia.getText(), Memoria.DBKeyPassword));
+        usuario_nuevo.setContrasenia(AES.encrypt(new String(this.jPasswordField_contrasenia1.getPassword()), Memoria.DBKeyPassword));
         usuario_nuevo.setNombre(jTextField2_nombre.getText());
         usuario_nuevo.setAp_paterno(jTextField4_primer_apellido.getText());
         usuario_nuevo.setAp_materno(jTextField3_segundo_apellido.getText());
@@ -295,11 +307,11 @@ public class MRegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField jPasswordField_contrasenia1;
+    private javax.swing.JPasswordField jPasswordField_contrasenia2;
     private javax.swing.JTextField jTextField1_nombre_de_usuario;
     private javax.swing.JTextField jTextField2_nombre;
     private javax.swing.JTextField jTextField3_segundo_apellido;
     private javax.swing.JTextField jTextField4_primer_apellido;
-    private javax.swing.JTextField jTextField5_contrasenia;
-    private javax.swing.JTextField jTextField6_repite_contrasenia;
     // End of variables declaration//GEN-END:variables
 }

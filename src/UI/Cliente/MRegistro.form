@@ -62,13 +62,13 @@
                           </Group>
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jTextField6_repite_contrasenia" max="32767" attributes="0"/>
-                              <Component id="jTextField5_contrasenia" max="32767" attributes="0"/>
                               <Component id="jTextField3_segundo_apellido" max="32767" attributes="0"/>
                               <Component id="jTextField2_nombre" max="32767" attributes="0"/>
                               <Component id="jTextField1_nombre_de_usuario" max="32767" attributes="0"/>
                               <Component id="jTextField4_primer_apellido" max="32767" attributes="0"/>
                               <Component id="jButton_crear_cuenta" alignment="0" pref="165" max="32767" attributes="0"/>
+                              <Component id="jPasswordField_contrasenia1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jPasswordField_contrasenia2" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel3_status" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -105,12 +105,12 @@
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField5_contrasenia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jPasswordField_contrasenia1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTextField6_repite_contrasenia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jPasswordField_contrasenia2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -119,7 +119,7 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jLabel3_status" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="29" max="32767" attributes="0"/>
+                  <EmptySpace pref="104" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -171,10 +171,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField4_primer_apellido">
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField5_contrasenia">
-        </Component>
-        <Component class="javax.swing.JTextField" name="jTextField6_repite_contrasenia">
-        </Component>
         <Component class="javax.swing.JButton" name="jButton1_cancelar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
@@ -192,6 +188,10 @@
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3_status">
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="jPasswordField_contrasenia1">
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="jPasswordField_contrasenia2">
         </Component>
       </SubComponents>
     </Container>
