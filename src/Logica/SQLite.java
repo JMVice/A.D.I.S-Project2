@@ -63,26 +63,39 @@ public class SQLite {
         }
     }
 
-    //Metodo para verificar si una tabla existe en la base de datos
-    //Se introduce el nombre de la tabla en la sobrecarga del metodo
-    public Boolean check_if_table_exists(String table_name) {
+    //Returns true if the database file exists
+    public Boolean verificar_si_existe_base_de_datos(String db_name) {
+        java.io.File file = new java.io.File(db_name);
+        if (file.exists()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean check_tables_existence(String[] tables) {
+        boolean status = true;
         try {
             this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
             DatabaseMetaData dbm = this.con.getMetaData();
-            ResultSet rs = dbm.getTables(null, null, table_name, null);
-            if (rs.next()) {
-                System.out.println("Table exists");
-                return true;
-            } else {
-                System.out.println("Table does not exist");
-                return false;
+
+            for (int i = 0; i < tables.length; i++) {
+                ResultSet rs = dbm.getTables(null, null, tables[i], null);
+                if (rs.next()) {
+                    System.out.println("Table exists");
+                } else {
+                    System.out.println("Table does not exist");
+                    status = false;
+                    break;
+                }
             }
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             return false;
         } finally {
             System.out.println("Query finished");
             Close_connection();
+            return status;
         }
     }
 

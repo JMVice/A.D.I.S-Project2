@@ -1,6 +1,5 @@
 package Logica;
 
-import UI.Cliente.MMetodoPago;
 import UI.MLogin;
 import javax.swing.JOptionPane;
 
@@ -10,8 +9,28 @@ public class Run {
 
     //Metodo de inicializacion del programa. Se coloca en el Main.
     public static void start_program() {
-        //Abre el menu de log in.
-        MLogin mLogin = new MLogin();
+        //Verifica si la base de datos existe.
+        if (Memoria.sql_lite_query.verificar_si_existe_base_de_datos(Memoria.database_name)) {
+            //Verifica que todas las tablas existan
+            String[] tables = {"USER","HISTORIAL_COMPRA","RUTA","TARJETA","TICKET"};
+            if (Memoria.sql_lite_query.check_tables_existence(tables)) {
+                //Abre el menu de log in.
+                MLogin mLogin = new MLogin();
+            } else{
+                message("La base de datos ha sido modificada o esta dañanada.\n"
+                        + "(Hay tablas faltantes en la base de datos)", "DB DAMAGED!", 0);
+                //Cierra el programa
+                System.exit(0);
+            }
+        } else {
+            message("La base de datos no ha sido encontrada!\nPor favor"
+                    + ", coloque la base de datos "
+                    + Memoria.app_name + ".db en la misma ruta"
+                    + " en la\nque se encuentra el programa y"
+                    + " vuelva a intentar ejecutar el programa.", "DB NOT FOUND!", 0);
+            //Cierra el programa
+            System.exit(0);
+        }
     }
 
     //Metodo que genera numeros aleatorios segun se especifique como un maximo
