@@ -267,13 +267,13 @@ public class MCompraEntrada extends javax.swing.JFrame {
         Tarjeta tarjeta = jList_tarjetas.getSelectedValue();
         if (tarjeta != null) {
             int precio_compra = 0;
-            LinkedList<Ticket> lista_tickets_comprados = new LinkedList<Ticket>();
+            LinkedList<Ticket> lista_tickets_a_comprar = new LinkedList<Ticket>();
             for (Ruta r : obtener_lista_de_rutas_seleccionadas()) {
                 precio_compra += r.getCosto();
-                lista_tickets_comprados.add(generar_ticket(r.getDB_ID(), r.getLugar_llegada(), r.getLugar_salida()));
+                lista_tickets_a_comprar.add(generar_ticket(r.getDB_ID(), r.getLugar_llegada(), r.getLugar_salida()));
             }
             reducir_saldo(precio_compra, tarjeta.getDB_ID());
-            guardar_tickets_en_base_de_datos(lista_tickets_comprados);
+            guardar_tickets_en_base_de_datos(lista_tickets_a_comprar);
             this.modelo_rutas_seleccionadas.clear();
             this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
             Run.message("Tickets comprados!", "Compra hecha", 1);

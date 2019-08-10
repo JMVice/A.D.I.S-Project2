@@ -288,7 +288,7 @@ public class MMetodoPago extends javax.swing.JFrame {
         t.setClienteID(Memoria.usuario_actual.getDB_ID());
         t.setFecha_caducidad(AES.encrypt("" + jComboBox_mes.getSelectedItem().toString() + "-" + jComboBox_anio.getSelectedItem().toString(), Memoria.DBKeyPassword));
         t.setNum_tarjeta(AES.encrypt(jTextField1_numero_tarjeta.getText(), Memoria.DBKeyPassword));
-        t.setSaldo(Run.random_x_between_y(300, 5000, 4));
+        t.setSaldo(Run.random_x_between_y(1000, 10000, 5));
         Memoria.sql_lite_query.Query("INSERT INTO TARJETA "
                 + "(UserID"
                 + ",Num_tarjeta"
