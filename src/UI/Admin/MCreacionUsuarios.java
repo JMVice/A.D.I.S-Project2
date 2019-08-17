@@ -21,7 +21,6 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
         initComponents();
         settings();
         cargar_usuarios();
-        actualizar_jlist();
     }
 
     private void settings() {
@@ -40,11 +39,14 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
         //Deshabilitamos el boton de guardar cambios porqué aun no se ha seleccionado
         //algun usuario para editar.
         this.jButton_actualizar_usuario_existente.setEnabled(false);
+        //Setea el label de estado a vacio
+        label_status_change("", "black");
     }
 
     //Trae los usuarios de la base de datos.
     private void cargar_usuarios() {
         this.lista_usuarios = Memoria.sql_lite_query.obtener_usuarios("SELECT * FROM USER");
+        actualizar_jlist();
     }
 
     //Llenar lista de usuarios
@@ -93,6 +95,7 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
         jRadioButton2_deshabilitado = new javax.swing.JRadioButton();
         jButton_actualizar_usuario_existente = new javax.swing.JButton();
         jLabel3_status = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,6 +157,8 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setText("STATUS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,8 +169,13 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1_volver)
-                        .addGap(61, 61, 61)
-                        .addComponent(jLabel3_status))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addComponent(jLabel3_status))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(97, 97, 97)
+                                .addComponent(jLabel11))))
                     .addComponent(jLabel2)
                     .addComponent(jLabel6)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -259,9 +269,11 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
                     .addComponent(jButton2_guardar_usuario_o_cancelar_cambios)
                     .addComponent(jButton_actualizar_usuario_existente))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1_volver)
-                    .addComponent(jLabel3_status))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1_volver)
+                        .addComponent(jLabel3_status))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -294,7 +306,7 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         //Se ejecuta cuando se hace click en la lista
         if (!this.lista_usuarios.isEmpty()) {
-         //Rellena los espacios del usuario si se selecciona uno
+            //Rellena los espacios del usuario si se selecciona uno
             this.usuario_seleccionado_para_editar = jList1.getSelectedValue();
             if (this.usuario_seleccionado_para_editar != null) {
                 rellenar_espacios_click_en_jlist(this.usuario_seleccionado_para_editar);
@@ -308,6 +320,15 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_jList1MouseClicked
 
     private void jButton_actualizar_usuario_existenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_actualizar_usuario_existenteActionPerformed
+        if (sin_espacios_vacios()
+                && sin_nombre_de_usuario_repetido()
+                && contrasenias_coinsiden()
+                && longitud_contrasenia(12)) {
+            actualizar_usuario();
+        }
+    }//GEN-LAST:event_jButton_actualizar_usuario_existenteActionPerformed
+
+    private void actualizar_usuario() {
         //Carga la información del usuario seleccionado 
         String nombre_usuario_original = this.usuario_seleccionado_para_editar.getNombre_de_usuario();
         this.usuario_seleccionado_para_editar.setNombre_de_usuario(jTextField1_nombre_de_usuario.getText());
@@ -315,7 +336,7 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
         this.usuario_seleccionado_para_editar.setAp_paterno(jTextField3_primer_apellido.getText());
         this.usuario_seleccionado_para_editar.setAp_materno(jTextField4_segundo_apellido.getText());
         this.usuario_seleccionado_para_editar.setContrasenia(AES.encrypt(new String(jPasswordField1_contrasenia.getPassword()), Memoria.DBKeyPassword));
-       // Lista de tipo de usuario
+        // Lista de tipo de usuario
         switch (jComboBox1_tipo_de_usuario.getSelectedItem().toString()) {
             case "Chofer":
                 this.usuario_seleccionado_para_editar.setRol("chofer");
@@ -342,23 +363,72 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
                 + " Ap_materno = '" + this.usuario_seleccionado_para_editar.getAp_materno() + "',"
                 + "Habilitado = '" + this.usuario_seleccionado_para_editar.isHabilitado() + "'\n"
                 + "WHERE UserID = " + this.usuario_seleccionado_para_editar.getDB_ID() + ";", "Usuario actualizado");
-       // Carga los usuarios con la informacion actualizada
+        // Carga los usuarios con la informacion actualizada
         cargar_usuarios();
-        actualizar_jlist();
         //Mensaje de confirmación
         Run.message("Usuario " + nombre_usuario_original + " ha sido actualizado.", "Actualizado", 1);
         limpiar_espacios();
         this.jButton2_guardar_usuario_o_cancelar_cambios.setText("Guardar usuario");
         this.jButton_actualizar_usuario_existente.setEnabled(false);
-    }//GEN-LAST:event_jButton_actualizar_usuario_existenteActionPerformed
+    }
+
+    private boolean sin_espacios_vacios() {
+        if (!jTextField1_nombre_de_usuario.getText().equals("")
+                && !jTextField2_nombre.getText().equals("")
+                && !jTextField3_primer_apellido.getText().equals("")
+                && !jTextField4_segundo_apellido.getText().equals("")
+                && !new String(this.jPasswordField1_contrasenia.getPassword()).equals("")
+                && !new String(this.jPasswordField2_repite_contrasenia.getPassword()).equals("")) {
+            return true;
+        } else {
+            label_status_change("Debe rellenar todos los espacios", "red");
+            return false;
+        }
+    }
+
+    private boolean sin_nombre_de_usuario_repetido() {
+        for (Usuario u : this.lista_usuarios) {
+            if (u.getNombre_de_usuario().toLowerCase().equals(this.jTextField1_nombre_de_usuario.getText().toLowerCase())) {
+                label_status_change("El nombre de usuario escrito ya ha sido tomado..", "red");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean contrasenias_coinsiden() {
+        String password_1 = new String(this.jPasswordField1_contrasenia.getPassword());
+        String password_2 = new String(this.jPasswordField2_repite_contrasenia.getPassword());
+        if (password_1.equals(password_2)) {
+            return true;
+        } else {
+            label_status_change("Las contraseñas no coinciden..", "red");
+            return false;
+        }
+    }
+
+    private boolean longitud_contrasenia(int longitud) {
+        String password = new String(this.jPasswordField1_contrasenia.getPassword());
+        if (password.length() >= longitud) {
+            return true;
+        } else {
+            label_status_change("La contraseña debe ser de 12 caracteres o más..", "red");
+            return false;
+        }
+    }
 
     private void jButton2_guardar_usuario_o_cancelar_cambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_guardar_usuario_o_cancelar_cambiosActionPerformed
         //Boton para guardar o cancelar cambios
         String opcion = this.jButton2_guardar_usuario_o_cancelar_cambios.getText();
         switch (opcion) {
             case "Guardar usuario":
-                guardar_nuevo_usuario();
-                break;
+                if (sin_espacios_vacios()
+                        && sin_nombre_de_usuario_repetido()
+                        && contrasenias_coinsiden()
+                        && longitud_contrasenia(12)) {
+                    guardar_nuevo_usuario();
+                    break;
+                }
             case "Cancelar cambios":
                 this.usuario_seleccionado_para_editar = null;
                 limpiar_espacios();
@@ -449,7 +519,27 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
         Run.message("Usuario " + u.getNombre_de_usuario() + " agregado!", "Agreagado", 1);
         limpiar_espacios();
         cargar_usuarios();
-        actualizar_jlist();
+    }
+
+    //cambia el color y el texto de el label de estado.
+    private void label_status_change(String message, String color) {
+        switch (color) {
+            case "red":
+                jLabel3_status.setForeground(Color.red);
+                break;
+            case "blue":
+                jLabel3_status.setForeground(Color.blue);
+                break;
+            case "green":
+                jLabel3_status.setForeground(Color.green);
+                break;
+            case "black":
+                jLabel3_status.setForeground(Color.black);
+                break;
+            default:
+                throw new AssertionError();
+        }
+        jLabel3_status.setText(message);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -460,6 +550,7 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1_tipo_de_usuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel3_status;
