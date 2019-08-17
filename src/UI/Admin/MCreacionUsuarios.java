@@ -313,7 +313,6 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
 
     private void jButton_actualizar_usuario_existenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_actualizar_usuario_existenteActionPerformed
         if (sin_espacios_vacios()
-                && sin_nombre_de_usuario_repetido()
                 && contrasenias_coinsiden()
                 && longitud_contrasenia(12)) {
             actualizar_usuario();
@@ -419,8 +418,8 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
                         && contrasenias_coinsiden()
                         && longitud_contrasenia(12)) {
                     guardar_nuevo_usuario();
-                    break;
                 }
+                break;
             case "Cancelar cambios":
                 this.usuario_seleccionado_para_editar = null;
                 limpiar_espacios();
