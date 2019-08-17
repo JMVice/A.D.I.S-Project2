@@ -179,17 +179,18 @@ public class MRegistro extends javax.swing.JFrame {
     private void jButton_crear_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_crear_cuentaActionPerformed
         if (usuario_no_repetido()
                 && sin_espacios_vacios()
-                && ecstencion_de_contrasenia_correcta()
-                && las_contrasenias_coinciden()) {
+                && longitud_contrasenia(8)
+                && las_contrasenias_coinciden()
+                && longitud_nombre_de_usuario(5)) {
             crear_cuenta();
         }
     }//GEN-LAST:event_jButton_crear_cuentaActionPerformed
 
-    private boolean ecstencion_de_contrasenia_correcta() {
-        if (new String(this.jPasswordField_contrasenia1.getPassword()).length() >= 6) {
+    private boolean longitud_contrasenia(int longitud) {
+        if (new String(this.jPasswordField_contrasenia1.getPassword()).length() >= longitud) {
             return true;
         } else {
-            label_status_change("La contraseña debe ser de al menos 6 caracteres.", "red");
+            label_status_change("La contraseña debe ser de al menos " + longitud + " caracteres.", "red");
             return false;
         }
     }
@@ -233,6 +234,16 @@ public class MRegistro extends javax.swing.JFrame {
             return true;
         } else {
             return true;
+        }
+    }
+
+    private boolean longitud_nombre_de_usuario(int longitud) {
+        String nombre_usuario = this.jTextField1_nombre_de_usuario.getText();
+        if (nombre_usuario.length() >= longitud) {
+            return true;
+        } else {
+            label_status_change("El nombre de usuario debe ser de al menos " + longitud + " caracteres", "red");
+            return false;
         }
     }
 

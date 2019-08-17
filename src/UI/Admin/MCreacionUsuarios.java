@@ -314,7 +314,8 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
     private void jButton_actualizar_usuario_existenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_actualizar_usuario_existenteActionPerformed
         if (sin_espacios_vacios()
                 && contrasenias_coinsiden()
-                && longitud_contrasenia(12)) {
+                && longitud_contrasenia(12)
+                && longitud_nombre_de_usuario(5)) {
             actualizar_usuario();
         }
     }//GEN-LAST:event_jButton_actualizar_usuario_existenteActionPerformed
@@ -403,7 +404,17 @@ public class MCreacionUsuarios extends javax.swing.JFrame {
         if (password.length() >= longitud) {
             return true;
         } else {
-            label_status_change("La contraseña debe ser de 12 caracteres o más..", "red");
+            label_status_change("La contraseña debe ser de " + longitud + " caracteres o más..", "red");
+            return false;
+        }
+    }
+
+    private boolean longitud_nombre_de_usuario(int longitud) {
+        String nombre_usuario = this.jTextField1_nombre_de_usuario.getText();
+        if (nombre_usuario.length() >= longitud) {
+            return true;
+        } else {
+            label_status_change("El nombre de usuario debe ser de al menos " + longitud + " caracteres", "red");
             return false;
         }
     }
