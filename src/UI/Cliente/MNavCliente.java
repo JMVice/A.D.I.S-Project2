@@ -42,7 +42,7 @@ public class MNavCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1_metodo_pago.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1_metodo_pago.setText("Método de pago");
+        jButton1_metodo_pago.setText("Métodos de pago");
         jButton1_metodo_pago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1_metodo_pagoActionPerformed(evt);
@@ -50,7 +50,7 @@ public class MNavCliente extends javax.swing.JFrame {
         });
 
         jButton2_compra_pasajes.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton2_compra_pasajes.setText("Compra de Pasajes");
+        jButton2_compra_pasajes.setText("Comprar Pasajes");
         jButton2_compra_pasajes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2_compra_pasajesActionPerformed(evt);
@@ -78,7 +78,7 @@ public class MNavCliente extends javax.swing.JFrame {
         });
 
         jButton4_cuenta_y_perfil.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton4_cuenta_y_perfil.setText("Cuenta y Perfil");
+        jButton4_cuenta_y_perfil.setText("Configuración de cuenta");
         jButton4_cuenta_y_perfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4_cuenta_y_perfilActionPerformed(evt);

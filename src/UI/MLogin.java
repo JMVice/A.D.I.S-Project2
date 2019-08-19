@@ -2,6 +2,7 @@ package UI;
 
 import Logica.AES;
 import Logica.Memoria;
+import Logica.Run;
 import Objetos.Usuario;
 import UI.Admin.MNavAdmin;
 import UI.Chofer.MChofer;
@@ -116,9 +117,11 @@ public class MLogin extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(117, 117, 117)
+                        .addComponent(jLabel3_status))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(129, 129, 129)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton_registrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3_status)
                             .addComponent(jButton_log_in, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(104, Short.MAX_VALUE))
         );
@@ -173,37 +176,49 @@ public class MLogin extends javax.swing.JFrame {
             this.lista_usuarios = Memoria.sql_lite_query.obtener_usuarios("SELECT * FROM USER");
             if (!this.lista_usuarios.isEmpty()) {
                 //Validación que el usuario exista
+                boolean usuario_existente = false;
                 for (Usuario u : this.lista_usuarios) {
                     // Se valida que la contraseña sea correcta y el nombre de usuario
                     if (AES.decrypt(u.getContrasenia(), Memoria.DBKeyPassword).equals(new String(jPasswordField1.getPassword()))
                             && u.getNombre_de_usuario().equals(jTextField1_nombre_usuario.getText().toLowerCase())) {
-                        Memoria.usuario_actual = u;
-                        //Abre nuevo menu de navegación dependiendo del rol
-                        switch (u.getRol()) {
-                            case "admin":
-                                MNavAdmin mNavAdmin = new MNavAdmin();
-                                this.dispose();
-                                break;
-                            case "cliente":
-                                MNavCliente mNavCliente = new MNavCliente();
-                                this.dispose();
-                                break;
-                            case "chofer":
-                                MChofer mChofer = new MChofer();
-                                this.dispose();
-                                break;
-                            case "masteradmin":
-                                MNavAdmin mNavAdmin2 = new MNavAdmin();
-                                this.dispose();
-                                break;
-                            default:
-                                throw new AssertionError();
+                        label_status_change("", "red");
+                        usuario_existente = true;
+                        if (u.isHabilitado()) {
+                            Memoria.usuario_actual = u;
+                            //Abre nuevo menu de navegación dependiendo del rol
+                            switch (u.getRol()) {
+                                case "admin":
+                                    MNavAdmin mNavAdmin = new MNavAdmin();
+                                    this.dispose();
+                                    break;
+                                case "cliente":
+                                    MNavCliente mNavCliente = new MNavCliente();
+                                    this.dispose();
+                                    break;
+                                case "chofer":
+                                    MChofer mChofer = new MChofer();
+                                    this.dispose();
+                                    break;
+                                case "masteradmin":
+                                    MNavAdmin mNavAdmin2 = new MNavAdmin();
+                                    this.dispose();
+                                    break;
+                                default:
+                                    throw new AssertionError();
+                            }
+                        } else {
+                            Run.message("Lo sentimos, la cuenta " + u.getNombre_de_usuario() + " "
+                                    + "ha sido deshabilitada",
+                                    "Cuenta deshabilitada!", 3);
+                            limpiar_espacios();
                         }
                         break;
                     }
                 }
-                //mensajes a mostrar dependiendo del error
-                label_status_change("El usuario o la contraseña no es correcta.", "red");
+                if (!usuario_existente) {
+                    //mensajes a mostrar dependiendo del error
+                    label_status_change("El usuario o la contraseña no es correcta.", "red");
+                }
             } else {
                 System.out.println("sin usuarios");
                 label_status_change("No hay usuarios en la base de datos", "red");
@@ -211,6 +226,12 @@ public class MLogin extends javax.swing.JFrame {
         } else {
             label_status_change("Debe rellenar todos los espacios.", "red");
         }
+    }
+
+    //limpia los espacios de nombre de usuario y contrasenia.
+    private void limpiar_espacios() {
+        this.jTextField1_nombre_usuario.setText("");
+        this.jPasswordField1.setText("");
     }
 
     private void jButton_registrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_registrarseActionPerformed

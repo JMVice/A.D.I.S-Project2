@@ -70,6 +70,12 @@ public class MRegistro extends javax.swing.JFrame {
 
         jLabel7.setText("Repita la contraseña: ");
 
+        jTextField1_nombre_de_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1_nombre_de_usuarioKeyTyped(evt);
+            }
+        });
+
         jButton1_cancelar.setText("Cancelar");
         jButton1_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +154,7 @@ public class MRegistro extends javax.swing.JFrame {
                     .addComponent(jButton_crear_cuenta))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3_status)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -156,16 +162,16 @@ public class MRegistro extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(32, 32, 32)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -181,10 +187,17 @@ public class MRegistro extends javax.swing.JFrame {
                 && sin_espacios_vacios()
                 && longitud_contrasenia(8)
                 && las_contrasenias_coinciden()
-                && longitud_nombre_de_usuario(5)) {
+                && longitud_nombre_de_usuario(5, 24)) {
             crear_cuenta();
         }
     }//GEN-LAST:event_jButton_crear_cuentaActionPerformed
+
+    private void jTextField1_nombre_de_usuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1_nombre_de_usuarioKeyTyped
+        char c = evt.getKeyChar();
+        if (jTextField1_nombre_de_usuario.getText().length() == 24) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField1_nombre_de_usuarioKeyTyped
 
     private boolean longitud_contrasenia(int longitud) {
         if (new String(this.jPasswordField_contrasenia1.getPassword()).length() >= longitud) {
@@ -237,12 +250,16 @@ public class MRegistro extends javax.swing.JFrame {
         }
     }
 
-    private boolean longitud_nombre_de_usuario(int longitud) {
+    private boolean longitud_nombre_de_usuario(int longitud_minima, int longitud_maxima) {
         String nombre_usuario = this.jTextField1_nombre_de_usuario.getText();
-        if (nombre_usuario.length() >= longitud) {
+        if (nombre_usuario.length() >= longitud_minima && nombre_usuario.length() <= longitud_maxima) {
             return true;
         } else {
-            label_status_change("El nombre de usuario debe ser de al menos " + longitud + " caracteres", "red");
+            if (nombre_usuario.length() < longitud_minima) {
+                label_status_change("El nombre de usuario debe ser de al menos " + longitud_minima + " caracteres", "red");
+            } else {
+                label_status_change("El nombre de usuario no puede ser mayor a " + longitud_maxima + " caracteres", "red");
+            }
             return false;
         }
     }

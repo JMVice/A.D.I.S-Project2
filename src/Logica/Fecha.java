@@ -25,19 +25,15 @@ public class Fecha {
         this.dia = day;
     }
 
+    //regresa el formato default.
     @Override
     public String toString() {
         return anio + "/" + mes + "/" + dia;
     }
 
-    //Regresa un formato de fecha por default
-    public String obtener_formato_de_fecha() {
-        return anio + "/" + mes + "/" + dia;
-    }
-
-    //Convierte el string entrante en variables para ser utilizadas por el objeto.
-    //Tambien devuelve el valor de la fecha completa en string
-    public String convertir_formato_de_fecha_y_obtener(String fecha_entrante) {
+    //Requiere un string con el formato de fecha default. Establece los valores
+    //en las variables locales del objeto
+    public void establecer_fecha(String fecha_entrante) {
         StringBuilder sb = new StringBuilder(fecha_entrante + "/");
         String valor_anio = "";
         String valor_mes = "";
@@ -59,19 +55,18 @@ public class Fecha {
         this.anio = Integer.parseInt(valor_anio);
         this.mes = Integer.parseInt(valor_mes);
         this.dia = Integer.parseInt(valor_dia);
-        return this.toString();
     }
 
-    //Regresa el año, mes y día actual del sistema.
+    //Regresa el año, mes y día actual del sistema en el formato default.
     public String obtener_fecha_del_sistema() {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         return dateFormat.format(date);
     }
 
-    //Se da a si mismo los valores de la fecha del sistema.
-    public void autoasigar_fecha_del_sistema() {
-        this.convertir_formato_de_fecha_y_obtener(this.obtener_fecha_del_sistema());
+    //Establece en las variables locales la hora actual del sistema.
+    public void asignar_fecha_del_sistema() {
+        this.establecer_fecha(this.obtener_fecha_del_sistema());
     }
 
     public int getAnio() {

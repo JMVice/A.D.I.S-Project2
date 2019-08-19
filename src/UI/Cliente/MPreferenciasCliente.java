@@ -5,6 +5,7 @@ import Logica.Memoria;
 import Logica.Run;
 import Objetos.Usuario;
 import UI.MLogin;
+import javax.swing.JOptionPane;
 
 public class MPreferenciasCliente extends javax.swing.JFrame {
 
@@ -26,6 +27,7 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
         this.setResizable(false);
         rellenar_espacios();
     }
+
     //Funcionalidad de los espacios para texto (jTextFields) para capturar información del menú
     private void rellenar_espacios() {
         jTextField1_nombre_usuario.setText(Memoria.usuario_actual.getNombre_de_usuario());
@@ -53,6 +55,7 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jButton1_guardar_cambios = new javax.swing.JButton();
         jButton2_deshabilitar_cuenta = new javax.swing.JButton();
+        jButton_cambiar_contrasenia = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,6 +97,13 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
             }
         });
 
+        jButton_cambiar_contrasenia.setText("Cambiar contraseña");
+        jButton_cambiar_contrasenia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_cambiar_contraseniaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -118,10 +128,11 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
                     .addComponent(jLabel11)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jToggleButton2_atras)
-                        .addGap(68, 68, 68)
+                        .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1_guardar_cambios)
-                            .addComponent(jButton2_deshabilitar_cuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton1_guardar_cambios, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                            .addComponent(jButton2_deshabilitar_cuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton_cambiar_contrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -149,16 +160,19 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jTextField6_ap2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addComponent(jToggleButton2_atras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(5, 5, 5)
+                        .addComponent(jToggleButton2_atras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(19, 19, 19))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(106, 106, 106)
                         .addComponent(jButton1_guardar_cambios)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2_deshabilitar_cuenta)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addComponent(jButton_cambiar_contrasenia)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addComponent(jButton2_deshabilitar_cuenta)
+                        .addGap(29, 29, 29))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,15 +180,16 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 29, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -196,29 +211,42 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
                 + "Nombre = '" + Memoria.usuario_actual.getNombre() + "',"
                 + "Ap_paterno = '" + Memoria.usuario_actual.getAp_paterno() + "',"
                 + "Ap_materno = '" + Memoria.usuario_actual.getAp_materno() + "'"
-                + "WHERE UserID = '" + Memoria.usuario_actual.getDB_ID() + "';","Usuario actualizado");
+                + "WHERE UserID = '" + Memoria.usuario_actual.getDB_ID() + "';", "Usuario actualizado");
         Run.message("Datos de la cuenta actualizados!", "Hecho", 1);
     }//GEN-LAST:event_jButton1_guardar_cambiosActionPerformed
 
     private void jButton2_deshabilitar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_deshabilitar_cuentaActionPerformed
         //Funcionalida del botón de deshabilitar cuenta de cliente
-        String mensaje = "¿Esta seguro de que desea deshabilitar su cuenta?\nEsta acción no puede deshacerse.";
-        int opcion = Run.askMessage(mensaje, "Deshabilitar cuenta", 0, 2);
-        if (opcion == 0) {
-            System.out.println("delete");
-            Memoria.sql_lite_query.Query("UPDATE USER\n"
-                    + "SET Habilitado = '" + false + "' "
-                    + "WHERE UserID = '" + Memoria.usuario_actual.getDB_ID() + "';","Usuario deshabilitado");
-            Memoria.usuario_actual = new Usuario();
-            MLogin mLogin = new MLogin();
-            this.dispose();
+        String status = JOptionPane.showInputDialog("¿Esta seguro "
+                + "de que desea deshabilitar su cuenta?"
+                + "\nEscriba \"delete\" dentro de la caja de texto para proceder"
+                + "\nEsta acción no puede deshacerse.");
+        try {
+            if (status.toLowerCase().equals("delete")) {
+                Memoria.sql_lite_query.Query("UPDATE USER\n"
+                        + "SET Habilitado = '" + false + "' "
+                        + "WHERE UserID = '" + Memoria.usuario_actual.getDB_ID() + "';", "Usuario deshabilitado");
+                Memoria.usuario_actual = new Usuario();
+                MLogin mLogin = new MLogin();
+                this.dispose();
+            } else {
+                System.out.println("cancelado");
+            }
+        } catch (Exception e) {
+            System.out.println("cancelado");
         }
     }//GEN-LAST:event_jButton2_deshabilitar_cuentaActionPerformed
+
+    private void jButton_cambiar_contraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cambiar_contraseniaActionPerformed
+        MCambiarContrasenia mCambiarContrasenia = new MCambiarContrasenia();
+        this.dispose();
+    }//GEN-LAST:event_jButton_cambiar_contraseniaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1_guardar_cambios;
     private javax.swing.JButton jButton2_deshabilitar_cuenta;
+    private javax.swing.JButton jButton_cambiar_contrasenia;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

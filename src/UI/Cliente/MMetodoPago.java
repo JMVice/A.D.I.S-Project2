@@ -330,7 +330,7 @@ public class MMetodoPago extends javax.swing.JFrame {
     //Previene que el usuario guarde una tarjeta con fecha de caducidad alcanzada
     private boolean tarjeta_no_vencida() {
         Fecha fecha_actual = new Fecha();
-        fecha_actual.autoasigar_fecha_del_sistema();
+        fecha_actual.asignar_fecha_del_sistema();
         int anio_dado = Integer.parseInt(jComboBox_anio.getSelectedItem().toString());
         if (anio_dado < fecha_actual.getAnio()) {
             label_status("No puede registrar una tarjeta vencida", "red");
