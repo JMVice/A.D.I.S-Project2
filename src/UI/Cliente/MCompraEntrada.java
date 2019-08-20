@@ -6,19 +6,20 @@ import Logica.Run;
 import Objetos.Ruta;
 import Objetos.Tarjeta;
 import Objetos.Ticket;
+import java.awt.Color;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
 
 public class MCompraEntrada extends javax.swing.JFrame {
 
-    private LinkedList<Tarjeta> lista_tarjetas = new LinkedList<Tarjeta>();
-    private DefaultListModel<Tarjeta> modelo_tarjetas = new DefaultListModel<Tarjeta>();
+    private LinkedList<Tarjeta> lista_tarjetas = new LinkedList<>();
+    private final DefaultListModel<Tarjeta> modelo_tarjetas = new DefaultListModel<>();
 
-    private LinkedList<Ruta> lista_rutas_disponibles = new LinkedList<Ruta>();
-    private DefaultListModel<Ruta> modelo_rutas_disponibles = new DefaultListModel<>();
+    private LinkedList<Ruta> lista_rutas_disponibles = new LinkedList<>();
+    private final DefaultListModel<Ruta> modelo_rutas_disponibles = new DefaultListModel<>();
 
-    private LinkedList<Ruta> lista_rutas_seleccionadas = new LinkedList<Ruta>();
-    private DefaultListModel<Ruta> modelo_rutas_seleccionadas = new DefaultListModel<>();
+    private final LinkedList<Ruta> lista_rutas_seleccionadas = new LinkedList<>();
+    private final DefaultListModel<Ruta> modelo_rutas_seleccionadas = new DefaultListModel<>();
 
     public MCompraEntrada() {
         initComponents();
@@ -37,18 +38,18 @@ public class MCompraEntrada extends javax.swing.JFrame {
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
         cargar_tarjetas();
-        rellenar_lista_tarjetas();
         cargar_rutas();
-        rellenar_lista_rutas_disponibles();
         //Ajustes del panel de vista de compra
         jTextArea_info.setLineWrap(true);
         jTextArea_info.setCaretPosition(0);
         jTextArea_info.setWrapStyleWord(true);
         jTextArea_info.setText("Sin rutas seleccionadas...");
+        label_status_change("", "");
     }
 
     private void cargar_tarjetas() {
         this.lista_tarjetas = Memoria.sql_lite_query.obtener_tarjetas("SELECT * FROM TARJETA");
+        rellenar_lista_tarjetas();
     }
 
     private void rellenar_lista_tarjetas() {
@@ -64,6 +65,7 @@ public class MCompraEntrada extends javax.swing.JFrame {
     //Trae las rutas de la base de datos.
     private void cargar_rutas() {
         this.lista_rutas_disponibles = Memoria.sql_lite_query.obtener_rutas("SELECT * FROM RUTA");
+        rellenar_lista_rutas_disponibles();
     }
 
     //Llenar lista de usuarios
@@ -72,7 +74,9 @@ public class MCompraEntrada extends javax.swing.JFrame {
         this.modelo_rutas_disponibles.clear();
         //Se rellena el jlist model con la lista de usuarios.
         for (Ruta u : this.lista_rutas_disponibles) {
-            this.modelo_rutas_disponibles.add(0, u);
+            if (u.isHabilidato()) {
+                this.modelo_rutas_disponibles.add(0, u);
+            }
         }
         //Se la establecemos al jList.
         this.jList_rutas_disponibles.setModel(this.modelo_rutas_disponibles);
@@ -100,6 +104,7 @@ public class MCompraEntrada extends javax.swing.JFrame {
         jButton_limpiar_viajes_seleccionados = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea_info = new javax.swing.JTextArea();
+        jLabel_status = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -162,6 +167,8 @@ public class MCompraEntrada extends javax.swing.JFrame {
         jTextArea_info.setRows(5);
         jScrollPane1.setViewportView(jTextArea_info);
 
+        jLabel_status.setText("SATUS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -171,6 +178,8 @@ public class MCompraEntrada extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2_volver)
+                        .addGap(52, 52, 52)
+                        .addComponent(jLabel_status)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,7 +245,9 @@ public class MCompraEntrada extends javax.swing.JFrame {
                                 .addComponent(jButton_limpiar_viajes_seleccionados))
                             .addComponent(jScrollPane2))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jButton2_volver)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2_volver)
+                    .addComponent(jLabel_status))
                 .addGap(20, 20, 20))
         );
 
@@ -265,28 +276,19 @@ public class MCompraEntrada extends javax.swing.JFrame {
 
     private void jButton_agregar_rutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_agregar_rutaActionPerformed
         //Se agregan la ruta en la lista tiquetes para comprar
-        this.modelo_rutas_seleccionadas.add(0, this.jList_rutas_disponibles.getSelectedValue());
-        this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
-        vista_de_compra();
+        if (this.modelo_rutas_seleccionadas.size() < 9) {
+            this.modelo_rutas_seleccionadas.add(0, this.jList_rutas_disponibles.getSelectedValue());
+            this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
+            actualizar_cuadro_de_informacion_de_compra();
+        }else{
+            label_status_change("Limite de rutas alcanzada. Sólo 9 tickets a la vez.", "red");
+        }
     }//GEN-LAST:event_jButton_agregar_rutaActionPerformed
 
-    //Genera una vista simple con el precio total de su compra.
-    private void vista_de_compra() {
-        if (!this.modelo_rutas_seleccionadas.isEmpty()) {
-            int precio_total = 0;
-            for (int i = 0; i < this.modelo_rutas_seleccionadas.size(); i++) {
-                precio_total += this.modelo_rutas_seleccionadas.get(i).getCosto();
-            }
-            String str = "Cantidad de tickets: " + this.modelo_rutas_seleccionadas.size() + "\n"
-                    + "Precio total: " + precio_total;
-            this.jTextArea_info.setText(str);
-        } else {
-            this.jTextArea_info.setText("Sin rutas seleccionadas...");
-        }
-    }
-
     private void jButton_removerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_removerActionPerformed
-        try {//Se retira el ticket seleccionado dentro de la lista a comprar.
+
+        //Se retira el ticket seleccionado dentro de la lista a comprar.
+        try {
             int db_id_ruta = this.jList_rutas_seleccionadas.getSelectedValue().getDB_ID();
             for (int i = 0; i < this.modelo_rutas_seleccionadas.getSize(); i++) {
                 if (this.modelo_rutas_seleccionadas.get(i).getDB_ID() == db_id_ruta) {
@@ -295,47 +297,134 @@ public class MCompraEntrada extends javax.swing.JFrame {
                 }
             }
             this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
-            vista_de_compra();
+            actualizar_cuadro_de_informacion_de_compra();
         } catch (NullPointerException e) {
             System.out.println("No selected item to remove.");
         }
     }//GEN-LAST:event_jButton_removerActionPerformed
 
     private void jButton_comprat_ticketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_comprat_ticketsActionPerformed
-        //Una vez que se agregue toda la informacion del tiquete se compra tiquete y se guarda la info
-        if (!this.modelo_rutas_seleccionadas.isEmpty()) {
-            Tarjeta tarjeta = jList_tarjetas.getSelectedValue();
-            if (tarjeta != null) {
-                int precio_compra = 0;
-                LinkedList<Ticket> lista_tickets_a_comprar = new LinkedList<Ticket>();
-                for (Ruta r : obtener_lista_de_rutas_seleccionadas()) {
-                    precio_compra += r.getCosto();
-                    lista_tickets_a_comprar.add(generar_ticket(r.getDB_ID(), r.getLugar_llegada(), r.getLugar_salida()));
-                }
-                if (tarjeta.getSaldo() >= precio_compra) {
-                    reducir_saldo(precio_compra, tarjeta.getDB_ID());
-                    guardar_tickets_en_base_de_datos(lista_tickets_a_comprar);
-                    this.modelo_rutas_seleccionadas.clear();
-                    this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
-                    Run.message("Tickets comprados!", "Compra hecha", 1);
-                } else {
-                    Run.message("La tarjeta " + tarjeta.toString() + " no tiene suficientes\n"
-                            + "fondos para concretar la compra de(l) ticket(s)", "Sin fondos", 2);
-                }
-            } else {
-                Run.message("Por favor, seleccione un metodo de pago", "Sin metodo de pago seleccionado", 1);
-            }
-        } else {
-            Run.message("Por favor, agrege rutas para comprar en la columna de compra.", "Sin rutas seleccionadas", 1);
+        //Secuencia de acciones para comprar y guardar los tickets en la base
+        //de datos.
+        if (hay_viajes_seleccionados()
+                && tarjeta_seleccionada()
+                && tarjeta_no_vencida()
+                && tarjeta_con_fondos_suficientes()) {
+            comprar_tickets();
         }
     }//GEN-LAST:event_jButton_comprat_ticketsActionPerformed
 
     private void jButton_limpiar_viajes_seleccionadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_limpiar_viajes_seleccionadosActionPerformed
-        this.modelo_rutas_seleccionadas.clear();
-        this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
-        vista_de_compra();
+        vaciar_lista_de_rutas_para_comprar();
     }//GEN-LAST:event_jButton_limpiar_viajes_seleccionadosActionPerformed
 
+    //Metodo que genera la secuencia de acciones para realizar una compra de tickets.
+    private void comprar_tickets() {
+        //Tarjeta elegida para realizar la compra.
+        Tarjeta tarjeta_utilizada = this.jList_tarjetas.getSelectedValue();
+
+        //Lista de tickets que se genera en base a las rutas seleccionadas para comprar 
+        //un ticket
+        LinkedList<Ticket> lista_tickets = new LinkedList<Ticket>();
+        for (Ruta ruta : obtener_lista_de_rutas_seleccionadas()) {
+            lista_tickets.add(generar_ticket(ruta.getDB_ID(), ruta.getLugar_llegada(), ruta.getLugar_salida()));
+        }
+
+        //Se utiliza la lista de tickets generada para guardar los tickets en la base de datos.
+        guardar_tickets_en_base_de_datos(lista_tickets);
+
+        //Se reduce el saldo de la tarjeta utilizada para realizar la compra.
+        reducir_saldo(obtener_precio_compra(), tarjeta_utilizada.getDB_ID());
+
+        //Se recargan las tarjetas con el saldo actualizado.
+        cargar_tarjetas();
+
+        //limpia la lista de rutas para comprar en forma de tickets.
+        vaciar_lista_de_rutas_para_comprar();
+
+        //Muestra mensaje de exito
+        Run.message("Compra realizada con exito", "Compra realizada", 1);
+
+        //Elimina los mensajes de error
+        label_status_change("", "");
+    }
+
+    //Vacia la lista de viajes seleccionados para comprar en tickets. 
+    //Reinicia ademas el cuadro de texto de vista de compra.
+    private void vaciar_lista_de_rutas_para_comprar() {
+        this.modelo_rutas_seleccionadas.clear();
+        this.jList_rutas_seleccionadas.setModel(this.modelo_rutas_seleccionadas);
+        actualizar_cuadro_de_informacion_de_compra();
+    }
+
+    //Verifica que el usuario haya seleccionado rutas para comprar.
+    private boolean hay_viajes_seleccionados() {
+        if (!this.modelo_rutas_seleccionadas.isEmpty()) {
+            return true;
+        } else {
+            label_status_change("Debe seleccionar al menos una ruta para comprar un ticket", "red");
+            return false;
+        }
+    }
+
+    //Verifica si el usuario ha seleccionado una tarjeta para efectuar la compra.
+    private boolean tarjeta_seleccionada() {
+        Tarjeta tarjeta = jList_tarjetas.getSelectedValue();
+        if (tarjeta != null) {
+            return true;
+        } else {
+            label_status_change("Debe seleccionar una tarjeta para efectuar la compra", "red");
+            return false;
+        }
+    }
+
+    //Verifica si la tarjeta seleccionada no esta vencida
+    private boolean tarjeta_no_vencida() {
+
+        //Variables temporales para generar la validacion. Tarjeta
+        Tarjeta tarjeta = jList_tarjetas.getSelectedValue();
+        int anio_vencimiento_tarjeta = tarjeta.obtener_anio_vencimiento();
+        int mes_vencimiento_tarjeta = tarjeta.obtener_mes_vencimiento();
+
+        //Fecha actual del sistema para validar tarjeta.
+        Logica.Fecha fecha_actual = new Logica.Fecha();
+        fecha_actual.asignar_fecha_del_sistema();
+
+        //Logica de la validacion
+        if (anio_vencimiento_tarjeta > fecha_actual.getAnio()) {
+            return true;
+        } else if (mes_vencimiento_tarjeta > fecha_actual.getMes()) {
+            return true;
+        } else {
+            label_status_change("La tarjeta con la que esta intentando efectuar el "
+                    + "pago esta vencida", "red");
+            return false;
+        }
+    }
+
+    //Verifica si la tarjeta seleccionada tiene suficientes fondos para ejectuar
+    //el pago
+    private boolean tarjeta_con_fondos_suficientes() {
+        Tarjeta tarjeta = jList_tarjetas.getSelectedValue();
+        if (tarjeta.getSaldo() >= obtener_precio_compra()) {
+            return true;
+        } else {
+            label_status_change("La tarjeta seleccionada no tiene suficientes"
+                    + " fondos para realizar la compra", "red");
+            return false;
+        }
+    }
+
+    //Retorna el costo total de la compra a efectuar.
+    private int obtener_precio_compra() {
+        int precio_compra = 0;
+        for (int i = 0; i < this.modelo_rutas_seleccionadas.size(); i++) {
+            precio_compra += this.modelo_rutas_disponibles.get(i).getCosto();
+        }
+        return precio_compra;
+    }
+
+    //Guarda en la base de datos la lista de tickets que se le de al metodo.
     private void guardar_tickets_en_base_de_datos(LinkedList<Ticket> lista_tickets_comprados) {//Una vez que se haya hecho la compra del tiquete la informacion se guardara en la base de datos
         for (Ticket ticket : lista_tickets_comprados) {
             Memoria.sql_lite_query.Query("INSERT INTO TICKET "
@@ -354,20 +443,17 @@ public class MCompraEntrada extends javax.swing.JFrame {
         }
     }
 
+    //Reduce el saldo de la tarjeta a la cual se le pase el id al metodo. Se 
+    //reduce el saldo que se le de al metodo.
     private void reducir_saldo(int precio_compra, int db_id_tarjeta) {//Una vez que se compra el tiquete se le reducira el saldo a la tarjeta del usuario
-        LinkedList<Tarjeta> lista_tarjetas = Memoria.sql_lite_query.obtener_tarjetas("SELECT * FROM TARJETA");
-        for (Tarjeta t : lista_tarjetas) {
-            if (t.getDB_ID() == db_id_tarjeta) {
-                int saldo_nuevo = t.getSaldo() - precio_compra;
-                Memoria.sql_lite_query.Query("UPDATE TARJETA\n"
-                        + "SET Saldo = '" + saldo_nuevo + "'"
-                        + "WHERE TarjetaID = '" + t.getDB_ID() + "';", "Tarjeta actualizada");
-                break;
-            }
-        }
+        Memoria.sql_lite_query.Query("UPDATE TARJETA\n"
+                + "SET Saldo = Saldo - " + precio_compra
+                + "WHERE TarjetaID = '" + db_id_tarjeta + "';", "Tarjeta actualizada");
     }
 
-    private LinkedList<Ruta> obtener_lista_de_rutas_seleccionadas() {//Cuando a haga la compra del tiquete se deben obtener la listas de las rutas agregadas
+    //Regresa una lista de objetos tipo Ruta. La lista corresponde a las Rutas elegidas
+    //por el usuario para comprar.
+    private LinkedList<Ruta> obtener_lista_de_rutas_seleccionadas() {
         LinkedList<Ruta> lista_rutas_selecciondas = new LinkedList<Ruta>();
         for (int i = 0; i < this.modelo_rutas_seleccionadas.size(); i++) {
             lista_rutas_selecciondas.add(this.modelo_rutas_seleccionadas.get(i));
@@ -375,14 +461,61 @@ public class MCompraEntrada extends javax.swing.JFrame {
         return lista_rutas_selecciondas;
     }
 
+    //Metodo de accion rapida que genera objetos de tipo Ticket con informacion
+    //personalizada para cada uno.
     private Ticket generar_ticket(int ruta_id, String lugar_llegada, String lugar_salida) {//Una vez el usuario haya comprado se genera el tiquete con toda la informacion agregada
-        Ticket t = new Ticket();
-        t.setClienteID(Memoria.usuario_actual.getDB_ID());
-        t.setCodigo(AES.encrypt("" + Run.random_x_between_y(0, 999, 3) + Run.randomLetter() + Run.random_x_between_y(0, 9999, 4), Memoria.DBKeyPassword));
-        t.setFecha_caducidad("sprint3");
-        t.setUtilizado(false);
-        t.setRutaID(ruta_id);
-        return t;
+        Ticket ticket = new Ticket();
+        ticket.setClienteID(Memoria.usuario_actual.getDB_ID());
+        ticket.setCodigo(AES.encrypt("" + Run.random_x_between_y(0, 999, 3) + Run.randomLetter() + Run.random_x_between_y(0, 9999, 4), Memoria.DBKeyPassword));
+        ticket.setFecha_caducidad(asignar_fecha_de_caducidad());
+        ticket.setUtilizado(false);
+        ticket.setRutaID(ruta_id);
+        return ticket;
+    }
+
+    //Da la fecha de caducidad al ticket. Aumenta el mes en 1.
+    private String asignar_fecha_de_caducidad() {
+        Logica.Fecha fecha = new Logica.Fecha();
+        fecha.asignar_fecha_del_sistema();
+        if (fecha.getMes() == 12) {
+            fecha.setAnio(fecha.getAnio() + 1);
+            fecha.setMes(1);
+        } else {
+            fecha.setMes(fecha.getMes() + 1);
+        }
+        return fecha.toString();
+    }
+
+    //Genera mensajes de error en pantalla.
+    private void label_status_change(String message, String color) {
+        switch (color) {
+            case "red":
+                jLabel_status.setForeground(Color.red);
+                break;
+            case "blue":
+                jLabel_status.setForeground(Color.blue);
+                break;
+            case "green":
+                jLabel_status.setForeground(Color.green);
+                break;
+            case "black":
+                jLabel_status.setForeground(Color.black);
+                break;
+            default:
+                jLabel_status.setForeground(Color.black);
+        }
+        jLabel_status.setText(message);
+    }
+
+    //Genera una vista simple con el precio total de su compra.
+    private void actualizar_cuadro_de_informacion_de_compra() {
+        if (!this.modelo_rutas_seleccionadas.isEmpty()) {
+            String str = "Cantidad de tickets: " + this.modelo_rutas_seleccionadas.size() + "\n"
+                    + "Precio total: " + obtener_precio_compra();
+            this.jTextArea_info.setText(str);
+        } else {
+            this.jTextArea_info.setText("Sin rutas seleccionadas...");
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -395,6 +528,7 @@ public class MCompraEntrada extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel_status;
     private javax.swing.JList<Ruta> jList_rutas_disponibles;
     private javax.swing.JList<Ruta> jList_rutas_seleccionadas;
     private javax.swing.JList<Tarjeta> jList_tarjetas;

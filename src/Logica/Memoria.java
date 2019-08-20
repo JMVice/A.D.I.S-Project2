@@ -9,7 +9,7 @@ import java.awt.Toolkit;
 public class Memoria {
 
     //Variable que contiene el nombre de la app.
-    public static String app_name = "ADIS G2";
+    public static String app_name = "ADIS G2 VERSION BETA 0.1";
     //Variable que contiene la contraseña para desencriptar la data.
     public static String DBKeyPassword = "ADISPROJECTULACIT2019";
     //Variable que contiene el nombre de la base de datos para ser cargada.

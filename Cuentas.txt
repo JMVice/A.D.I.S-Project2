@@ -1,0 +1,13 @@
+ACCOUNTS TO LOG IN: 
+
+ADMINISTRATOR:
+	user name: admin
+	password: 123
+
+CLIENT
+	user name: user
+	password: 123
+	
+BUS DRIVER
+	user name: chofer
+	password: 123

@@ -50,6 +50,42 @@ public class Tarjeta {
         this.Saldo = Saldo;
     }
 
+    //Regresa el mes de caducidad de la tarjeta
+    public int obtener_mes_vencimiento() {
+        //Variables para hacer la extraccion del mes de caducidad.
+        String fecha = AES.decrypt(this.Fecha_caducidad, Memoria.DBKeyPassword);
+        StringBuilder stringBuilder = new StringBuilder(fecha);
+        String mes = "";
+
+        //Logica de extraccion. Ejmeplo de fecha: 10-2058
+        while (stringBuilder.charAt(0) != '-') {
+            mes += stringBuilder.charAt(0);
+            stringBuilder.deleteCharAt(0);
+        }
+        return Integer.parseInt(mes);
+    }
+
+    //Regresa el mes de caducidad de la tarjeta
+    public int obtener_anio_vencimiento() {
+        //Variables para hacer la extraccion del año de caducidad.
+        String fecha = AES.decrypt(this.Fecha_caducidad, Memoria.DBKeyPassword);
+        StringBuilder stringBuilder = new StringBuilder(fecha);
+        String anio = "";
+
+        //Logica de extraccion. Ejmeplo de fecha: 10-2058
+        while (stringBuilder.charAt(0) != '-') {
+            stringBuilder.deleteCharAt(0);
+        }
+        stringBuilder.deleteCharAt(0);
+
+        while (stringBuilder.length() != 0) {
+            anio += stringBuilder.charAt(0);
+            stringBuilder.deleteCharAt(0);
+        }
+
+        return Integer.parseInt(anio);
+    }
+
     //Seccion de gets y set
     public int getDB_ID() {
         return DB_ID;

@@ -105,6 +105,7 @@ public class Ruta {
         this.habilidato = habilidato;
     }
 
+    //El nombre de la ruta se basa en el lugar de salida y llegada.
     public String getNombreRuta() {
         return this.lugar_salida + "-" + this.lugar_llegada;
     }
