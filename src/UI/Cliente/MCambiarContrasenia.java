@@ -164,10 +164,11 @@ public class MCambiarContrasenia extends javax.swing.JFrame {
                 && contrasenias_coinciden()
                 && contrasenia_actual_correcta()
                 && longitud_contrasenia(8)) {
-            cambiar_contrasenia();
+            actualizar_contrasenia();
         }
     }//GEN-LAST:event_jButton_guardar_nueva_contraseniaActionPerformed
 
+    //Verifica si las contraseñas digitadas por el usuario coinciden.
     private boolean contrasenias_coinciden() {
         String contrasenia_nueva = new String(this.jPasswordField_contrasenia_nueva.getPassword());
         String repite_contrasenia_nueva = new String(this.jPasswordField_repite_contrasenia.getPassword());
@@ -179,6 +180,8 @@ public class MCambiarContrasenia extends javax.swing.JFrame {
         }
     }
 
+    //Verifica que todos los espacios esten llenos antes de guardar la informacion
+    //en la base de datos.
     private boolean sin_espacios_vacios() {
         String contrasenia_escrita = new String(this.jPasswordField_contrasenia_actual.getPassword());
         String contrasenia_nueva = new String(this.jPasswordField_contrasenia_nueva.getPassword());
@@ -193,6 +196,7 @@ public class MCambiarContrasenia extends javax.swing.JFrame {
         }
     }
 
+    //Verifica si la contraseña escrita corresponde a la contraseña actual del cliente.
     private boolean contrasenia_actual_correcta() {
         String contrasenia_escrita = new String(this.jPasswordField_contrasenia_actual.getPassword());
         String contrasenia_actual = AES.decrypt(Memoria.usuario_actual.getContrasenia(), Memoria.DBKeyPassword);
@@ -204,6 +208,8 @@ public class MCambiarContrasenia extends javax.swing.JFrame {
         }
     }
 
+    //La longitud de la contraseña debe ser de un tamaño especifico. Este metodo
+    //valida si la contraseña tiene la longitud que se requiere.
     private boolean longitud_contrasenia(int length) {
         String repite_contrasenia_nueva = new String(this.jPasswordField_repite_contrasenia.getPassword());
         if (repite_contrasenia_nueva.length() >= length) {
@@ -214,8 +220,8 @@ public class MCambiarContrasenia extends javax.swing.JFrame {
         }
     }
 
-    //Realiza la accion de cambiar la contraseña
-    private void cambiar_contrasenia() {
+    //Metodo que realiza el cambio de contraseña en la base de datos.
+    private void actualizar_contrasenia() {
         //Cambia la contraseña actual del usuario guardado en memoria.
         Memoria.usuario_actual.setContrasenia(
                 AES.encrypt(new String(this.jPasswordField_repite_contrasenia.getPassword()),
@@ -225,13 +231,14 @@ public class MCambiarContrasenia extends javax.swing.JFrame {
                 + "SET Contrasenia = '" + 
                 Memoria.usuario_actual.getContrasenia() + "'"
                 + "WHERE UserID = '" + Memoria.usuario_actual.getDB_ID() + "';", "Contrasenia actualizada");
+        //Muestra el mensaje de que la contraseña ha sido cambiada con exito.
         Run.message("La contraseña ha sido actualizada.", "Hecho", 1);
-        //Cierra este frame y abre las preferencias del usuario.
+        //Cierra este frame y abre las preferencias del usuario nuevamente.
         MPreferenciasCliente mPreferenciasCliente = new MPreferenciasCliente();
         this.dispose();
     }
 
-    //Establece un mensaje para mostrar al usuario cualquier error cometido.
+    //Establece un mensaje en pantalla para mostrar algun error.
     private void label_status_change(String message, String color) {
         switch (color) {
             case "red":

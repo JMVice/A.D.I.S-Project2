@@ -15,9 +15,8 @@ import javax.swing.ImageIcon;
 //pase.
 public class QRModule {
 
-    //metodo que retorna un ImageIcon el cual es el tipo de objecto que requiere
-    //ser una imagen para ser establetida en un jlabel.
-    //Se le pasa el codigo a modo de String.
+    //Genera un objeto de tipo ImageIcon que corresponde a un codigo QR. El 
+    //codigo QR es generado con el String que se la pasa al metodo.
     public ImageIcon generar_imagen_qr(String codigo) {
         try {
             //Objeto que escribe mapas de bits de codigo QR

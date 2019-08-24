@@ -76,7 +76,7 @@ public class Run {
         return result;
     }
 
-    //Metodo que regresa una letra aleatoria del alfabeto.
+    //Metodo que retorna una letra aleatoria del alfabeto.
     public static String randomLetter() {
         String[] alfabeto = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "O", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "Z", "X", "Y"};
         String result = "";
@@ -91,6 +91,7 @@ public class Run {
         return result;
     }
 
+    //Genera una ventana JOptionPane con el texto que se le pase al metodo
     /**
      * 0=Error 1=Message 2=Alert 3=What
      *
@@ -119,6 +120,7 @@ public class Run {
         }
     }
 
+    //Este metodo genera un JOptionPane que pregunta al usuario la accion a tomar.
     /**
      * options: 0: Yes, no. Yes=0. No=1. X=-1. 1: Yes, no, cancel. Yes=0. No=1.
      * Cancel:2. X=-1. 2: Accept, cancel. Accept=0. Cancel:2. X=-1.

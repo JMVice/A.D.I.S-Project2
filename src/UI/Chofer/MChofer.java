@@ -628,11 +628,14 @@ public class MChofer extends javax.swing.JFrame {
 
     private void jButton_pago_validarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_pago_validarActionPerformed
         //Al pulsar el boton de validar pago, se llama el metodo correspondiente a esta accion.
-        verificacion_antes_de_pago(tipo_de_pago());
+        REALIZAR_PAGO(tipo_de_pago());
     }//GEN-LAST:event_jButton_pago_validarActionPerformed
 
     //Tipo de pago. 0=Pago manual. 1=Pago por ticket.
-    private void verificacion_antes_de_pago(int tipo_pago) {
+    //Contiene todas las validaciones para realizar el pago. Si todo es correcto
+    //Se hacen las consultas en la base de datos que concuerdan al pago del
+    //servicio.
+    private void REALIZAR_PAGO(int tipo_pago) {
         switch (tipo_pago) {
             //pago manual
             case 0:
@@ -732,7 +735,7 @@ public class MChofer extends javax.swing.JFrame {
         this.jButton9.setEnabled(estado);
     }
 
-    //Vacia
+    //Vacia el pequeño panel de digitación.
     private void limpiar_panel_electronico() {
         this.contenido_panel_de_digitación = "";
         this.jTextField_panel_de_digitacion.setText("");
@@ -743,7 +746,8 @@ public class MChofer extends javax.swing.JFrame {
         this.jTextField_panel_de_digitacion.setEditable(estado);
     }
 
-    //Metodo que cambia el texto del vuelto del usuario
+    //Metodo que muetra mensajes en pantalla al usuario. Principalemente el vuelto
+    //del cliente.
     private void label_status_change(String message, String color) {
         switch (color) {
             case "red":
@@ -764,8 +768,8 @@ public class MChofer extends javax.swing.JFrame {
         jLabel_status.setText(message);
     }
 
-    //Inserta un registro en la tabla de historial de compras cuando se hace una
-    //entrada de un cliente utilizando un ticket.
+    //Inserta un registro en la tabla de historial de compras caundo el cliente
+    //usa un ticket para entrar al autobus.
     private void insertar_registro_en_historial_compra_TICKET(Ticket ticket) {
         Memoria.sql_lite_query.Query("INSERT INTO HISTORIAL_COMPRA "
                 + "(UserID_cliente"
@@ -779,8 +783,8 @@ public class MChofer extends javax.swing.JFrame {
                 + ", '" + ticket.getRutaID() + "');", "Registro de pago con ticket guardado");
     }
 
-    //Inserta un registro en la tabla de historial de compras cuando se hace una
-    //entrada de un cliente cuando paga de manera manual
+    //Inserta un registro en la tabla de historial de compras cuando el cliente
+    //paga en efectivo.
     private void insertar_registro_en_historial_compra_PAGO_MANUAL() {
         Memoria.sql_lite_query.Query("INSERT INTO HISTORIAL_COMPRA "
                 + "(UserID_cobrador"

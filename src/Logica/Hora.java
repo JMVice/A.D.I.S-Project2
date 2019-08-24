@@ -352,6 +352,8 @@ public class Hora {
         }
     }
 
+    
+    //GET Y SET
     public String getHora() {
         return hora;
     }

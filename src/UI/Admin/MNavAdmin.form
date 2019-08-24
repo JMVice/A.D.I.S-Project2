@@ -49,17 +49,19 @@
               <Group type="102" attributes="0">
                   <EmptySpace pref="19" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                          <Component id="jLabel1_bienvenida" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                          <Component id="jButton2_administrar_usuarios" max="32767" attributes="0"/>
-                          <Component id="jButton1_editar_rutas" min="-2" pref="239" max="-2" attributes="0"/>
-                          <Component id="jButton3_log_out" min="-2" pref="239" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jButton2_administrar_usuarios" max="32767" attributes="0"/>
                       <Component id="jButton1_deshabiltar_cliente" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                  <Component id="jLabel1_bienvenida" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jButton1_editar_rutas" min="-2" pref="239" max="-2" attributes="0"/>
+                              <Component id="jButton3_log_out" min="-2" pref="239" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

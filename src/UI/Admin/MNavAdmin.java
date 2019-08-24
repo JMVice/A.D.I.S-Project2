@@ -128,21 +128,25 @@ public class MNavAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3_log_outActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3_log_outActionPerformed
+        //Boton de cerrar sesion
         MLogin mLogin = new MLogin();
         this.dispose();
     }//GEN-LAST:event_jButton3_log_outActionPerformed
 
     private void jButton1_editar_rutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_editar_rutasActionPerformed
+        //Boton para ir al menu de editar rutas
         MCreacionRutas mCreacionRutas = new MCreacionRutas();
         this.dispose();
     }//GEN-LAST:event_jButton1_editar_rutasActionPerformed
 
     private void jButton2_administrar_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_administrar_usuariosActionPerformed
+        //Boton para ir al menu de administrar usuarios
         MCreacionUsuarios mCreacionUsuarios = new MCreacionUsuarios();
         this.dispose();
     }//GEN-LAST:event_jButton2_administrar_usuariosActionPerformed
 
     private void jButton1_deshabiltar_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_deshabiltar_clienteActionPerformed
+        //Boton para ir al menu de deshabilitar o habilitar usuarios
         MDeshabilitarClientes mDeshabilitarClientes = new MDeshabilitarClientes();
         this.dispose();
     }//GEN-LAST:event_jButton1_deshabiltar_clienteActionPerformed

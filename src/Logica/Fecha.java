@@ -69,6 +69,7 @@ public class Fecha {
         this.establecer_fecha(this.obtener_fecha_del_sistema());
     }
 
+    //GET y SET
     public int getAnio() {
         return anio;
     }

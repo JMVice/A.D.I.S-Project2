@@ -157,10 +157,9 @@ public class MNavCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2_compra_pasajesActionPerformed
 
     private void jButton3_resumen_comprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3_resumen_comprasActionPerformed
-        MComprasHechas mComprasHechas = new MComprasHechas();
-        this.dispose();
+            MComprasHechas mComprasHechas = new MComprasHechas();
+            this.dispose();
     }//GEN-LAST:event_jButton3_resumen_comprasActionPerformed
-
     private void jButton4_cuenta_y_perfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4_cuenta_y_perfilActionPerformed
         MPreferenciasCliente mPreferenciasCliente = new MPreferenciasCliente();
         this.dispose();

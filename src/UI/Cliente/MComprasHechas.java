@@ -14,7 +14,7 @@ public class MComprasHechas extends javax.swing.JFrame {
     private LinkedList<Ticket> lista_tickets = new LinkedList<Ticket>();
     private DefaultListModel<Ticket> modelo_tickets = new DefaultListModel<>();
     private LinkedList<Ruta> lista_rutas = new LinkedList<Ruta>();
-    private QRModule qr = new QRModule();
+    private QRModule qr;
 
     public MComprasHechas() {
         initComponents();
@@ -22,16 +22,10 @@ public class MComprasHechas extends javax.swing.JFrame {
         cargar_rutas();
         cargar_tickets();
         rellenar_lista_tickets();
-        panel_resumen_settings();
-    }
-
-    private void panel_resumen_settings() {
-        //Hace un salto de linea si el texto llega al final de la derecha
-        jTextArea_panel_resumen.setLineWrap(true);
-        //posiciona el scroll vertical hasta arriba
-        jTextArea_panel_resumen.setCaretPosition(0);
-        //Hace un salto de linea si el texto llega al final de la derecha
-        jTextArea_panel_resumen.setWrapStyleWord(true);
+        try {
+            this.qr = new QRModule();
+        } catch (Exception e) {
+        }
     }
 
     private void cargar_tickets() {
@@ -40,7 +34,7 @@ public class MComprasHechas extends javax.swing.JFrame {
         for (int i = 0; i < lista_tickets.size(); i++) {
             // Si el ID de una ruta es el mismo al cual pertence la ruta del ticket se le asigna esa ruta al ticket 
             // por que el nombre del ticket se basa en el punto de partida y llegada guardado en el objeto de tipo ruta
-            for (Ruta r : this.lista_rutas) {               
+            for (Ruta r : this.lista_rutas) {
                 if (lista_tickets.get(i).getRutaID() == r.getDB_ID()) {
                     lista_tickets.get(i).setRuta(r);
                     break;
@@ -49,6 +43,8 @@ public class MComprasHechas extends javax.swing.JFrame {
         }
     }
 
+    //Rellena la lista de tickets con los tickets comprados por el usuario
+    //actual que esta logeado.
     private void rellenar_lista_tickets() {
         //Muestra solomaente los tickets del usuario que esta en loggeado
         this.modelo_tickets.clear();
@@ -64,6 +60,7 @@ public class MComprasHechas extends javax.swing.JFrame {
         this.lista_rutas = Memoria.sql_lite_query.obtener_rutas("SELECT * FROM RUTA");
     }
 
+    //Ajustes del frame y set up de objetos.
     private void settings() {
         //Establece el icono en la barra de estado y en el icono.
         setIconImage(Memoria.getIconImage());
@@ -75,6 +72,12 @@ public class MComprasHechas extends javax.swing.JFrame {
         this.setTitle(Memoria.app_name);
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
+        //Hace un salto de linea si el texto llega al final de la derecha
+        jTextArea_panel_resumen.setLineWrap(true);
+        //posiciona el scroll vertical hasta arriba
+        jTextArea_panel_resumen.setCaretPosition(0);
+        //Hace un salto de linea si el texto llega al final de la derecha
+        jTextArea_panel_resumen.setWrapStyleWord(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -192,18 +195,29 @@ public class MComprasHechas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1_volverActionPerformed
 
     private void jList_ticketsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList_ticketsMouseClicked
-        //Muestr la informacion del tiquet en el panel
+        mostrar_informacion_ticket();
+    }//GEN-LAST:event_jList_ticketsMouseClicked
+
+    //Establece la información del ticket al cual el usuario ha hecho click
+    //dentro del cuadro informativo. Establece también el codigo QR.
+    private void mostrar_informacion_ticket() {
+        //Variables temporales.
         Ticket t = jList_tickets.getSelectedValue();
         String resumen = "";
+
+        //Verifica si un ticket fue seleccionado.
         if (t != null) {
+
+            //Variable para guardar la información de que si el ticket ha sido
+            //utilizado o no.
             String utilizado = "";
-           // si el tiquete fue utilizado muestra un mensaje
-           // si no fue utilizado muestra la información del tiquete
             if (t.isUtilizado()) {
                 utilizado = "El tickete ha sido utilizado...";
             } else {
                 utilizado = "No";
             }
+
+            //Se prepara el string que mostrara la informacion dentro del cuadro informativo.
             resumen = "Viaje " + t.getRuta().getLugar_salida() + "-" + t.getRuta().getLugar_llegada() + "\n"
                     + "\n"
                     + "Codigo: " + AES.decrypt(t.getCodigo(), Memoria.DBKeyPassword) + "\n"
@@ -214,13 +228,29 @@ public class MComprasHechas extends javax.swing.JFrame {
                     + "\n"
                     + "\n"
                     + "Descripción de la ruta: \n" + obtener_descripcion_ruta(t.getRutaID());
-            jLabel1_qr.setIcon(this.qr.generar_imagen_qr(AES.decrypt(t.getCodigo(), Memoria.DBKeyPassword)));
-        }
-        jTextArea_panel_resumen.setText(resumen);
-    }//GEN-LAST:event_jList_ticketsMouseClicked
 
+            //Se establece dentro de un jLabel la imagen QR generada con el objeto
+            //QR. El codigo corresponde al codigo del ticket seleccionado.
+            try {
+                jLabel1_qr.setIcon(this.qr.generar_imagen_qr(AES.decrypt(t.getCodigo(), Memoria.DBKeyPassword)));
+            } catch (Exception e) {
+                Logica.Run.message("The Libraries \n\njavase-3.3.0.jar\n"
+                    + "zxing core-3.3.0.jar.jar\n\nWeren't found! Please, locate the "
+                    + "libraries and add to .jar application\n"
+                    + "Consult Troubleshooting - Libraries "
+                    + "Troubleshooting.pdf for more information", "LIBRARIES NOT FOUND!", 0);
+            System.exit(0);
+            }
+        }
+
+        //Establece la informacion dentro del cuadro informativo.
+        jTextArea_panel_resumen.setText(resumen);
+    }
+
+    //Retorna la información de la ruta a la cual el ticket esta asociada.
+    //Esto es necesario para rellenar con la información de la ruta dentro del
+    //cuadro informativo.
     private String obtener_descripcion_ruta(int ruta_id) {
-      //muestra la descripcion de la ruta
         String mensaje = "";
         for (Ruta r : this.lista_rutas) {
             if (r.getDB_ID() == ruta_id) {

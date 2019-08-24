@@ -55,15 +55,16 @@ public class MMetodoPago extends javax.swing.JFrame {
         this.jList_tarjetas.setModel(this.modelo_tarjetas);
     }
 
+    //Vacia los espacios de texto cuando es llamado.
     private void limpiar_espacios() {
         jTextField1_numero_tarjeta.setText("");
         jTextField2_cvv.setText("");
-        label_status_tarjeta("", "black");
+        label_marca_tarjeta("", "black");
         label_status("", "black");
     }
 
     //Un usuario solo puede guardar 3 tarjetas. Si guarda más de 3, el usuario
-    //no podra ingresar mas.
+    //no podra guardar mas.
     private void verificar_limite_de_tarjetas() {
         if (this.contador_de_tarjetas_usuario >= 3) {
             label_status("Limite de 3 tarjetas alcanzado...", "blue");
@@ -277,18 +278,26 @@ public class MMetodoPago extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2_volverActionPerformed
 
     private void jButton_guardar_metodo_de_pagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_guardar_metodo_de_pagoActionPerformed
-        if (sin_espacios_vacios() && tamanios_correctos_tarjeta_cvv() && es_tarjeta_valida() && tarjeta_no_vencida()) {
-            guardar_metodo_de_pago();
+        if (sin_espacios_vacios() && tamanios_correctos_tarjeta_cvv() && es_tarjeta_visa_o_mastercard() && tarjeta_no_vencida()) {
+            guardar_tarjeta_en_base_de_datos();
         }
     }//GEN-LAST:event_jButton_guardar_metodo_de_pagoActionPerformed
 
-    private void guardar_metodo_de_pago() {
+    //Metodo que se encarga de guardar los parametros establecidos en los espacios
+    //vacios como una nueva tarjeta.
+    private void guardar_tarjeta_en_base_de_datos() {
+        
+        //Variable temporal de tipo tarjeta a la cual se le asignan todos los
+        //parametros ingresados por el usuario.
         Tarjeta t = new Tarjeta();
         t.setCVV(AES.encrypt(jTextField2_cvv.getText(), Memoria.DBKeyPassword));
         t.setClienteID(Memoria.usuario_actual.getDB_ID());
         t.setFecha_caducidad(AES.encrypt("" + jComboBox_mes.getSelectedItem().toString() + "-" + jComboBox_anio.getSelectedItem().toString(), Memoria.DBKeyPassword));
         t.setNum_tarjeta(AES.encrypt(jTextField1_numero_tarjeta.getText(), Memoria.DBKeyPassword));
+        //El saldo del usuario es por default entre 1000 a 10.000 colones.
         t.setSaldo(Run.random_x_between_y(1000, 10000, 5));
+        
+        //Se hace la consulta sql para guardar la tarjeta nueva en la base de datos.
         Memoria.sql_lite_query.Query("INSERT INTO TARJETA "
                 + "(UserID"
                 + ",Num_tarjeta"
@@ -301,13 +310,24 @@ public class MMetodoPago extends javax.swing.JFrame {
                 + ", '" + t.getCVV() + "'"
                 + ", '" + t.getFecha_caducidad() + "'"
                 + ", '" + t.getSaldo() + "');", "Metodo de pago agregado");
+        
+        //Se recargan las tarjetas para mostrar la nueva tarjeta en la lista y
+        //se vacian todos los espacios.
         cargar_tarjetas();
         rellenar_lista();
         limpiar_espacios();
+        
+        //Verifica si el limite de tarjeta ha sido alcanzado. Si es así, se des-
+        //habilitan los espacios y botones para guardar otra. El limite por 
+        //default es de 3 tarjetas por usuario.
         verificar_limite_de_tarjetas();
+        
+        //Se muestra un mensaje de exito al usuario.
         Run.message("Tarjeta guardada!", "Guardado", 1);
     }
 
+    //Verifica si han llenado todos los espacios necesarios para guarda la
+    //tarjeta.
     private boolean sin_espacios_vacios() {
         if (!jTextField1_numero_tarjeta.getText().equals("") && !jTextField2_cvv.getText().equals("")) {
             return true;
@@ -327,7 +347,7 @@ public class MMetodoPago extends javax.swing.JFrame {
         }
     }
 
-    //Previene que el usuario guarde una tarjeta con fecha de caducidad alcanzada
+    //Verifica si la tarjeta que esta a punto de ser registrada no esta vencida.
     private boolean tarjeta_no_vencida() {
         Fecha fecha_actual = new Fecha();
         fecha_actual.asignar_fecha_del_sistema();
@@ -349,8 +369,10 @@ public class MMetodoPago extends javax.swing.JFrame {
         }
     }
 
-    private boolean es_tarjeta_valida() {
-        if (jTextField1_numero_tarjeta.getText().charAt(0) == '4' || jTextField1_numero_tarjeta.getText().charAt(0) == '5') {
+    //Verifica si la tarjeta que esta por ser guardada es VISA o MasterCard.
+    private boolean es_tarjeta_visa_o_mastercard() {
+        if (jTextField1_numero_tarjeta.getText().charAt(0) == '4'
+                || jTextField1_numero_tarjeta.getText().charAt(0) == '5') {
             return true;
         } else {
             label_status("¡La tarjeta no es valida!", "red");
@@ -358,7 +380,8 @@ public class MMetodoPago extends javax.swing.JFrame {
         }
     }
 
-    private void jButton_eliminar_tarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eliminar_tarjetaActionPerformed
+    //Metodo encargado de eliminar la tarjeta seleccionada por el usuario.
+    private void eliminar_tarjeta() {
         if (jList_tarjetas.getSelectedValue() != null) {
             Memoria.sql_lite_query.Query("DELETE FROM TARJETA "
                     + "WHERE TarjetaID = '" + jList_tarjetas.getSelectedValue().getDB_ID() + "';", "Metodo de pago eliminado");
@@ -369,23 +392,35 @@ public class MMetodoPago extends javax.swing.JFrame {
         } else {
             System.out.println("Tarjeta no seleccionada");
         }
+    }
+
+    private void jButton_eliminar_tarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_eliminar_tarjetaActionPerformed
+        eliminar_tarjeta();
     }//GEN-LAST:event_jButton_eliminar_tarjetaActionPerformed
 
     private void jTextField1_numero_tarjetaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1_numero_tarjetaKeyTyped
+
+        //Este codigo se despliega cuando se digita un numero dentro del espacio
+        //para digitar el numero de tarjeta
+        //Si la tecla pulsada no es un numero o se ha llegado al limite de 16 digitos
+        //no se digitara lo pulsado dentro del espacio de numero de tarjeta
         char c = evt.getKeyChar();
         if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || jTextField1_numero_tarjeta.getText().length() == 16) {
             evt.consume();
         }
+
+        //Vefirica si la tarjeta ingresada es VISA, MasterCard o no valida. 
+        //Muestra además en pantalla la marca de tarjeta.
         if (!jTextField1_numero_tarjeta.getText().equals("")) {
             switch (jTextField1_numero_tarjeta.getText().charAt(0)) {
                 case '4':
-                    label_status_tarjeta("VISA", "blue");
+                    label_marca_tarjeta("VISA", "blue");
                     break;
                 case '5':
-                    label_status_tarjeta("MasterCard", "blue");
+                    label_marca_tarjeta("MasterCard", "blue");
                     break;
                 default:
-                    label_status_tarjeta("Tarjeta no valida!", "red");
+                    label_marca_tarjeta("Tarjeta no valida!", "red");
                     break;
             }
         }
@@ -398,8 +433,8 @@ public class MMetodoPago extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField2_cvvKeyTyped
 
-    //Asigna un estado a la tarjeta.
-    private void label_status_tarjeta(String message, String color) {
+    //Muestra en pantalla si la tarjeta escrita es VISA, MasterCard o no valida.
+    private void label_marca_tarjeta(String message, String color) {
         switch (color) {
             case "red":
                 jLabel_status_tarjeta.setForeground(Color.red);
@@ -420,6 +455,7 @@ public class MMetodoPago extends javax.swing.JFrame {
         jLabel_status_tarjeta.setText(message);
     }
 
+    //Muestra mensajes en pantalla para el usuario. Generalmente mensajes de error.
     private void label_status(String message, String color) {
         switch (color) {
             case "red":
