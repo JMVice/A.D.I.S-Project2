@@ -63,29 +63,50 @@ public class SQLite {
         }
     }
 
-    //Metodo para verificar si una tabla existe en la base de datos
-    //Se introduce el nombre de la tabla en la sobrecarga del metodo
-    public Boolean check_if_table_exists(String table_name) {
+    //Returns true if the database file exists
+    public Boolean verificar_si_existe_base_de_datos(String db_name) {
+        java.io.File file = new java.io.File(db_name);
+        if (file.exists()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Retorna true si las tablas pasadas por el array de string existen dentro
+    //de la base de datos.
+    public Boolean check_tables_existence(String[] tables) {
+        boolean status = true;
         try {
             this.con = DriverManager.getConnection("jdbc:sqlite:" + data_source_path);
             DatabaseMetaData dbm = this.con.getMetaData();
-            ResultSet rs = dbm.getTables(null, null, table_name, null);
-            if (rs.next()) {
-                System.out.println("Table exists");
-                return true;
-            } else {
-                System.out.println("Table does not exist");
-                return false;
+
+            for (int i = 0; i < tables.length; i++) {
+                ResultSet rs = dbm.getTables(null, null, tables[i], null);
+                if (rs.next()) {
+                    System.out.println("Table exists");
+                } else {
+                    System.out.println("Table does not exist");
+                    status = false;
+                    break;
+                }
             }
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
+            Run.message("The Library: \n\nsqlite-jdbc-3.27.2.1.jar"
+                    + "\n\nWasn't found! Please, locate the "
+                    + "library and add to .jar application\n"
+                    + "Consult Troubleshooting - Libraries "
+                    + "Troubleshooting.pdf for more information", "LIBRARY NOT FOUND!", 0);
             return false;
         } finally {
             System.out.println("Query finished");
             Close_connection();
+            return status;
         }
     }
 
+    //Retorna todos los valores de la tabla USER en formato LinkedList
     public LinkedList<Usuario> obtener_usuarios(String query) {
         LinkedList<Usuario> lista_usuarios = new LinkedList<Usuario>();
         try {
@@ -120,6 +141,7 @@ public class SQLite {
         return lista_usuarios;
     }
 
+    //Retorna todos los valores de la tabla TARJETA en formato LinkedList
     public LinkedList<Tarjeta> obtener_tarjetas(String query) {
         LinkedList<Tarjeta> lista_tarjetas = new LinkedList<Tarjeta>();
         Tarjeta t = new Tarjeta();
@@ -147,6 +169,7 @@ public class SQLite {
         }
     }
 
+    //Retorna todos los valores de la tabla RUTA en formato LinkedList
     public LinkedList<Ruta> obtener_rutas(String query) {
         LinkedList<Ruta> lista_rutas = new LinkedList<Ruta>();
         try {
@@ -181,6 +204,7 @@ public class SQLite {
         return lista_rutas;
     }
 
+    //Retorna todos los valores de la tabla TICKET en formato LinkedList
     public LinkedList<Ticket> obtener_tickets(String query) {
         LinkedList<Ticket> lista_tickets = new LinkedList<Ticket>();
         try {
@@ -261,26 +285,10 @@ public class SQLite {
         }
     }
 
-    private int number_of_rows() {
-        try {
-            this.rs.last();
-            int result = this.rs.getRow();
-            this.rs.first();
-            return result;
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLite.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
-        }
-    }
-
     //</editor-fold>
     //<editor-fold desc="GET and SET">
     public String getData_source_path() {
         return data_source_path;
-    }
-
-    public void setData_source_path(String data_source_path) {
-        this.data_source_path = data_source_path;
     }
 
     //</editor-fold>

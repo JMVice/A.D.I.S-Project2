@@ -1,11 +1,13 @@
 package UI.Admin;
 
+import Logica.Hora;
 import Logica.Memoria;
 import Logica.Run;
 import Objetos.Ruta;
-import Objetos.Ticket;
+import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
+import java.awt.Color;
 
 public class MCreacionRutas extends javax.swing.JFrame {
 
@@ -36,6 +38,7 @@ public class MCreacionRutas extends javax.swing.JFrame {
         this.jRadioButton_habilitado.setSelected(true);
         this.jButton1_actualizar_ruta_seleccionada.setEnabled(false);
         this.jButton2_guardar_ruta_cancelar_cambios.setText("Guardar ruta");
+        label_status_change("", "");
     }
 
     //Trae las rutas de la base de datos.
@@ -64,6 +67,220 @@ public class MCreacionRutas extends javax.swing.JFrame {
         jTextArea1_descripcion.setWrapStyleWord(true);
     }
 
+    //Verifica si todos los espacios de texto tienen algo escrito.
+    private boolean sin_espacios_vacios() {
+        if (!jTextField2_costo.getText().equals("")
+                && !jTextArea1_descripcion.getText().equals("")
+                && !jTextField4_lugar_salida.getText().equals("")
+                && !jTextField5_lugar_llegada.getText().equals("")
+                && !jTextField6_hora_salida_hora.getText().equals("")
+                && !jTextField_hora_salida_minuto.getText().equals("")
+                && !jTextField7_hora_llegada_hora.getText().equals("")
+                && !jTextField_hora_llegada_minuto.getText().equals("")) {
+            return true;
+        } else {
+            label_status_change("Debe rellenar todos los espacios", "red");
+            return false;
+        }
+    }
+
+    //Verifica que todos las horas escritas dentro de los paneles de texto para
+    //indicar la hora tengan un sintaxis correcto. Revisar clase Hora para estudiar
+    //sobre el sintaxis.
+    private boolean horarios_correctos() {
+        Hora hora = new Hora();
+        if (hora.hora_hora_correcta(jTextField6_hora_salida_hora.getText())
+                && hora.hora_hora_correcta(jTextField7_hora_llegada_hora.getText())
+                && hora.hora_minuto_correcto(jTextField_hora_salida_minuto.getText())
+                && hora.hora_minuto_correcto(jTextField_hora_llegada_minuto.getText())) {
+            return true;
+        } else {
+            label_status_change("Los horarios no son correctos.", "red");
+            return false;
+        }
+    }
+
+    //Verifica que el pasaje tenga un costo real
+    private boolean costo_correcto() {
+        //Establecemos una variable temporal
+        int costo = Integer.parseInt(this.jTextField2_costo.getText());
+
+        //El costo debe ser al menos mayor o igual a 50 para ser un costo real.
+        if (costo >= 50) {
+            return true;
+        } else {
+            label_status_change("El costo del pasaje debe "
+                    + "ser de al menos 50 colones", "red");
+            return false;
+        }
+    }
+
+    //Rellena los espacios con la informacion de la ruta 
+    private void rellenar_espacios_click_en_jlist(Ruta ruta) {
+        //Variables que guardan informacion para rellenar los espacios.
+        Hora objeto_hora_salida = new Hora(ruta.getHora_salida());
+        String hora_salida_hora = objeto_hora_salida.getHora();
+        String hora_salida_minuto = objeto_hora_salida.getMinuto();
+        Hora objeto_hora_llegada = new Hora(ruta.getHora_llegada());
+        String hora_llegada_hora = objeto_hora_llegada.getHora();
+        String hora_llegada_minuto = objeto_hora_llegada.getMinuto();
+
+        //Establece las horas en los espacios
+        jTextField6_hora_salida_hora.setText(hora_salida_hora);
+        jTextField_hora_salida_minuto.setText(hora_salida_minuto);
+        jTextField7_hora_llegada_hora.setText(hora_llegada_hora);
+        jTextField_hora_llegada_minuto.setText(hora_llegada_minuto);
+
+        //Establece la informacion de los otros espacios con el objeto pasado
+        //por el metodo. Objeto "ruta".
+        jTextField2_costo.setText("" + ruta.getCosto());
+        jTextArea1_descripcion.setText(ruta.getDescripcion_ruta());
+        jTextField4_lugar_salida.setText(ruta.getLugar_salida());
+        jTextField5_lugar_llegada.setText(ruta.getLugar_llegada());
+        if (ruta.isHabilidato()) {
+            jRadioButton_habilitado.setSelected(true);
+            jRadioButton_deshabilitada.setSelected(false);
+        } else {
+            jRadioButton_habilitado.setSelected(false);
+            jRadioButton_deshabilitada.setSelected(true);
+        }
+    }
+
+    //Metodo para guardar una ruta en la base de datos con base a la informacion
+    //escrita en los campos de texto.
+    private void guardar_nueva_ruta() {
+        //Variables y objetos temporales para construir la nueva ruta a guardar.
+        Ruta ruta = new Ruta();
+        Hora hora = new Hora();
+        String hora_salida_hora = hora.control_de_hora(jTextField6_hora_salida_hora.getText());
+        String hora_salida_minuto = hora.control_de_minuto(jTextField_hora_salida_minuto.getText());
+        String hora_llegada_hora = hora.control_de_hora(jTextField7_hora_llegada_hora.getText());
+        String hora_llegada_minuto = hora.control_de_minuto(jTextField_hora_llegada_minuto.getText());
+
+        //Rellenamos un objeto de tipo ruta con la informacion dada.
+        ruta.setCosto(Integer.parseInt(jTextField2_costo.getText()));
+        ruta.setDescripcion_ruta(jTextArea1_descripcion.getText());
+        ruta.setLugar_salida(jTextField4_lugar_salida.getText());
+        ruta.setLugar_llegada(jTextField5_lugar_llegada.getText());
+        ruta.setHora_salida(hora_salida_hora + ":" + hora_salida_minuto);
+        ruta.setHora_llegada(hora_llegada_hora + ":" + hora_llegada_minuto);
+        if (jRadioButton_habilitado.isSelected()) {
+            ruta.setHabilidato(true);
+        } else {
+            ruta.setHabilidato(false);
+        }
+
+        //Guardamos la ruta en la base de datos con la consulta SQLite
+        Memoria.sql_lite_query.Query("INSERT INTO RUTA("
+                + "Costo"
+                + ",Descripcion_ruta"
+                + ",Lugar_salida"
+                + ",Lugar_llegada"
+                + ",Hora_salida"
+                + ",Hora_llegada"
+                + ",Habilitado)"
+                + "VALUES("
+                + "'" + ruta.getCosto() + "',"
+                + "'" + ruta.getDescripcion_ruta() + "',"
+                + "'" + ruta.getLugar_salida() + "',"
+                + "'" + ruta.getLugar_llegada() + "',"
+                + "'" + ruta.getHora_salida() + "',"
+                + "'" + ruta.getHora_llegada() + "',"
+                + "'" + ruta.isHabilidato() + "');", "Ruta agregada");
+
+        //Recargamos las rutas, limpiamos los espacios de texto, mostramos
+        //un mensaje de exito al usuario y limpiamos los mensajes de posibles
+        //errores.
+        cargar_rutas();
+        rellenar_lista_rutas();
+        limpiar_espacios();
+        Run.message("Ruta " + ruta.getNombreRuta() + " agregada!", "Agreagado", 1);
+        label_status_change("", "");
+    }
+
+    //Actualiza la información de una ruta basandose en lo escrito.
+    private void actualizar_ruta() {
+        //Variables para establecer la hora
+        Hora hora = new Hora();
+        String hora_salida_hora = hora.control_de_hora(jTextField6_hora_salida_hora.getText());
+        String hora_salida_minuto = hora.control_de_minuto(jTextField_hora_salida_minuto.getText());
+        String hora_llegada_hora = hora.control_de_hora(jTextField7_hora_llegada_hora.getText());
+        String hora_llegada_minuto = hora.control_de_minuto(jTextField_hora_llegada_minuto.getText());
+
+        //Variable que sera usada para mostrar un mensaje al usuario
+        String nombre_ruta_original = this.ruta_seleccionada_para_editar.getNombreRuta();
+
+        //Se establece toda la informacion en el objeto de tipo ruta para guardar
+        //en la base de datos
+        this.ruta_seleccionada_para_editar.setCosto(Integer.parseInt(jTextField2_costo.getText()));
+        this.ruta_seleccionada_para_editar.setDescripcion_ruta(jTextArea1_descripcion.getText());
+        this.ruta_seleccionada_para_editar.setLugar_llegada(jTextField5_lugar_llegada.getText());
+        this.ruta_seleccionada_para_editar.setLugar_salida(jTextField4_lugar_salida.getText());
+        this.ruta_seleccionada_para_editar.setHora_salida(hora_salida_hora + ":" + hora_salida_minuto);
+        this.ruta_seleccionada_para_editar.setHora_llegada(hora_llegada_hora + ":" + hora_llegada_minuto);
+        if (this.jRadioButton_habilitado.isSelected()) {
+            this.ruta_seleccionada_para_editar.setHabilidato(true);
+        } else {
+            this.ruta_seleccionada_para_editar.setHabilidato(false);
+        }
+
+        //Se hace la consulta SQLite.
+        Memoria.sql_lite_query.Query("UPDATE RUTA\n"//Actualiza la ruta que el usuario anteriormente creo 
+                + "SET Costo = '" + this.ruta_seleccionada_para_editar.getCosto() + "',"
+                + " Descripcion_ruta = '" + this.ruta_seleccionada_para_editar.getDescripcion_ruta() + "', "
+                + " Lugar_salida = '" + this.ruta_seleccionada_para_editar.getLugar_salida() + "',"
+                + " Lugar_llegada = '" + this.ruta_seleccionada_para_editar.getLugar_llegada() + "',"
+                + " Hora_salida = '" + this.ruta_seleccionada_para_editar.getHora_salida() + "',"
+                + " Hora_llegada = '" + this.ruta_seleccionada_para_editar.getHora_llegada() + "',"
+                + " Habilitado = '" + this.ruta_seleccionada_para_editar.isHabilidato() + "'"
+                + "WHERE RutaID = " + this.ruta_seleccionada_para_editar.getDB_ID() + ";", "Ruta actualizada");
+
+        //Una vez hecha la consulta, se actualiza la lista de rutas, se muestra un mensaje de exito
+        //se limpian los espacios de texto y se reestablecen los botones para
+        //guardar una nueva ruta. Vaciamos el label de mensajes de errores.
+        cargar_rutas();
+        rellenar_lista_rutas();
+        Run.message("Ruta " + nombre_ruta_original + " ha sido actualizada.", "Actualizada", 1);
+        limpiar_espacios();
+        this.jButton2_guardar_ruta_cancelar_cambios.setText("Guardar ruta");
+        this.jButton1_actualizar_ruta_seleccionada.setEnabled(false);
+        label_status_change("", "");
+    }
+
+    //Deja todas las barras de texto vacias.
+    private void limpiar_espacios() {
+        //Deja en blanco todos los espacios de texto.
+        jTextField2_costo.setText("");
+        jTextArea1_descripcion.setText("");
+        jTextField4_lugar_salida.setText("");
+        jTextField5_lugar_llegada.setText("");
+        jTextField6_hora_salida_hora.setText("");
+        jTextField_hora_salida_minuto.setText("");
+        jTextField7_hora_llegada_hora.setText("");
+        jTextField_hora_llegada_minuto.setText("");
+    }
+
+    //Establece mensajes en pantalla para el usuario
+    private void label_status_change(String message, String color) {
+        switch (color) {
+            case "red":
+                jLabel_status.setForeground(Color.red);
+                break;
+            case "blue":
+                jLabel_status.setForeground(Color.blue);
+                break;
+            case "green":
+                jLabel_status.setForeground(Color.green);
+                break;
+            case "black":
+                jLabel_status.setForeground(Color.black);
+                break;
+            default:
+                jLabel_status.setForeground(Color.black);
+        }
+        jLabel_status.setText(message);
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -80,8 +297,8 @@ public class MCreacionRutas extends javax.swing.JFrame {
         jTextField2_costo = new javax.swing.JTextField();
         jTextField4_lugar_salida = new javax.swing.JTextField();
         jTextField5_lugar_llegada = new javax.swing.JTextField();
-        jTextField6_hora_salida = new javax.swing.JTextField();
-        jTextField7_hora_llegada = new javax.swing.JTextField();
+        jTextField6_hora_salida_hora = new javax.swing.JTextField();
+        jTextField7_hora_llegada_hora = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1_descripcion = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
@@ -93,6 +310,12 @@ public class MCreacionRutas extends javax.swing.JFrame {
         jButton3_volver = new javax.swing.JButton();
         jButton2_guardar_ruta_cancelar_cambios = new javax.swing.JButton();
         jButton1_actualizar_ruta_seleccionada = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jTextField_hora_salida_minuto = new javax.swing.JTextField();
+        jTextField_hora_llegada_minuto = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel_status = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,6 +332,24 @@ public class MCreacionRutas extends javax.swing.JFrame {
         jLabel7.setText("Hora de Llegada");
 
         jLabel8.setText("Estado de la ruta");
+
+        jTextField2_costo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2_costoKeyTyped(evt);
+            }
+        });
+
+        jTextField6_hora_salida_hora.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField6_hora_salida_horaKeyTyped(evt);
+            }
+        });
+
+        jTextField7_hora_llegada_hora.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField7_hora_llegada_horaKeyTyped(evt);
+            }
+        });
 
         jTextArea1_descripcion.setColumns(20);
         jTextArea1_descripcion.setRows(5);
@@ -154,60 +395,101 @@ public class MCreacionRutas extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setText(":");
+
+        jLabel13.setText(":");
+
+        jTextField_hora_salida_minuto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_hora_salida_minutoKeyTyped(evt);
+            }
+        });
+
+        jTextField_hora_llegada_minuto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_hora_llegada_minutoKeyTyped(evt);
+            }
+        });
+
+        jLabel1.setText("--- Formato 24 horas ---");
+
+        jLabel_status.setText("STATUS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jButton3_volver)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(216, 216, 216))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(32, 32, 32)
-                                .addComponent(jScrollPane1))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField5_lugar_llegada)
-                                    .addComponent(jTextField6_hora_salida)
-                                    .addComponent(jTextField4_lugar_salida)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField7_hora_llegada))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                                .addComponent(jRadioButton_habilitado)
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButton_deshabilitada)
-                                .addGap(14, 14, 14)))
-                        .addGap(10, 10, 10))
-                    .addComponent(jButton2_guardar_ruta_cancelar_cambios, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton3_volver)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2_costo, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(58, 58, 58))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1_actualizar_ruta_seleccionada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(216, 216, 216))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(32, 32, 32)
+                                                .addComponent(jScrollPane1))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel5)
+                                                    .addComponent(jLabel4))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jTextField5_lugar_llegada)
+                                                    .addComponent(jTextField4_lugar_salida)))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel8)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                                                .addComponent(jRadioButton_habilitado)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jRadioButton_deshabilitada)
+                                                .addGap(14, 14, 14)))
+                                        .addGap(10, 10, 10))
+                                    .addComponent(jButton2_guardar_ruta_cancelar_cambios, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField2_costo, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel6)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jTextField6_hora_salida_hora, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextField_hora_salida_minuto, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel7)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jTextField7_hora_llegada_hora, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jLabel13)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jTextField_hora_llegada_minuto, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(58, 58, 58))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton1_actualizar_ruta_seleccionada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(132, 132, 132))
         );
         jPanel1Layout.setVerticalGroup(
@@ -233,15 +515,21 @@ public class MCreacionRutas extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(jTextField5_lugar_llegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField6_hora_salida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField6_hora_salida_hora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)
+                            .addComponent(jTextField_hora_salida_minuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7_hora_llegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
+                            .addComponent(jTextField7_hora_llegada_hora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13)
+                            .addComponent(jTextField_hora_llegada_minuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jRadioButton_deshabilitada)
                             .addComponent(jLabel8)
@@ -255,7 +543,9 @@ public class MCreacionRutas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1_actualizar_ruta_seleccionada)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(jButton3_volver)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3_volver)
+                    .addComponent(jLabel_status))
                 .addContainerGap())
         );
 
@@ -282,11 +572,19 @@ public class MCreacionRutas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3_volverActionPerformed
 
     private void jButton2_guardar_ruta_cancelar_cambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_guardar_ruta_cancelar_cambiosActionPerformed
+        //Revisa que tipo de accion hara el boton.
         String opcion = this.jButton2_guardar_ruta_cancelar_cambios.getText();
-        switch (opcion) {//
-            case "Guardar ruta"://Guarda la ruta que el usuario agrego
-                guardar_nueva_ruta();
+        switch (opcion) {
+            //Guarda la ruta que el usuario agrego
+            case "Guardar ruta":
+                Hora hora = new Hora();
+                if (sin_espacios_vacios()
+                        && costo_correcto()
+                        && horarios_correctos()) {
+                    guardar_nueva_ruta();
+                }
                 break;
+
             case "Cancelar cambios"://Cancela la informacion que el usuario agrego o cambio 
                 this.ruta_seleccionada_para_editar = null;
                 limpiar_espacios();// Elimina cualquier informacion que haya en los espacios 
@@ -301,7 +599,7 @@ public class MCreacionRutas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2_guardar_ruta_cancelar_cambiosActionPerformed
 
     private void jList_rutasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList_rutasMouseClicked
-       this.ruta_seleccionada_para_editar = jList_rutas.getSelectedValue();
+        this.ruta_seleccionada_para_editar = jList_rutas.getSelectedValue();
         //Selecciona la ruta a editar 
         if (this.ruta_seleccionada_para_editar != null) {
             rellenar_espacios_click_en_jlist(this.ruta_seleccionada_para_editar);
@@ -314,108 +612,61 @@ public class MCreacionRutas extends javax.swing.JFrame {
     }//GEN-LAST:event_jList_rutasMouseClicked
 
     private void jButton1_actualizar_ruta_seleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_actualizar_ruta_seleccionadaActionPerformed
-        String nombre_ruta_original = this.ruta_seleccionada_para_editar.getNombreRuta();
-        //Se agrega el nombre de la ruta 
-        this.ruta_seleccionada_para_editar.setCosto(Integer.parseInt(jTextField2_costo.getText()));
-        //Se agrega el costo del viaje
-        this.ruta_seleccionada_para_editar.setDescripcion_ruta(jTextArea1_descripcion.getText());
-        //Se agrega una descripcion de la ruta 
-        this.ruta_seleccionada_para_editar.setLugar_llegada(jTextField5_lugar_llegada.getText());
-       
-        this.ruta_seleccionada_para_editar.setLugar_salida(jTextField4_lugar_salida.getText());
-        this.ruta_seleccionada_para_editar.setHora_salida(jTextField6_hora_salida.getText());
-        this.ruta_seleccionada_para_editar.setHora_llegada(jTextField7_hora_llegada.getText());
-        if (this.jRadioButton_habilitado.isSelected()) {
-            this.ruta_seleccionada_para_editar.setHabilidato(true);
-        } else {
-            this.ruta_seleccionada_para_editar.setHabilidato(false);
+        if (sin_espacios_vacios()
+                && costo_correcto()
+                && horarios_correctos()) {
+            actualizar_ruta();
         }
-        Memoria.sql_lite_query.Query("UPDATE RUTA\n"//Actualiza la ruta que el usuario anteriormente creo 
-                + "SET Costo = '" + this.ruta_seleccionada_para_editar.getCosto() + "',"
-                + " Descripcion_ruta = '" + this.ruta_seleccionada_para_editar.getDescripcion_ruta() + "', "
-                + " Lugar_salida = '" + this.ruta_seleccionada_para_editar.getLugar_salida() + "',"
-                + " Lugar_llegada = '" + this.ruta_seleccionada_para_editar.getLugar_llegada() + "',"
-                + " Hora_salida = '" + this.ruta_seleccionada_para_editar.getHora_salida() + "',"
-                + " Hora_llegada = '" + this.ruta_seleccionada_para_editar.getHora_llegada() + "',"
-                + " Habilitado = '" + this.ruta_seleccionada_para_editar.isHabilidato() + "'"
-                + "WHERE RutaID = " + this.ruta_seleccionada_para_editar.getDB_ID() + ";", "Ruta actualizada");
-        cargar_rutas();//Se rellena una lista de rutas con la informacion actualizada y las rutas que se vayan agregando
-        rellenar_lista_rutas();
-        Run.message("Ruta " + nombre_ruta_original + " ha sido actualizada.", "Actualizada", 1);
-        limpiar_espacios();
-        this.jButton2_guardar_ruta_cancelar_cambios.setText("Guardar ruta");
-        this.jButton1_actualizar_ruta_seleccionada.setEnabled(false);
-
     }//GEN-LAST:event_jButton1_actualizar_ruta_seleccionadaActionPerformed
 
-    private void rellenar_espacios_click_en_jlist(Ruta r) {//Rellena los espacios con la informacion de la ruta 
-        jTextField2_costo.setText("" + r.getCosto());
-        jTextArea1_descripcion.setText(r.getDescripcion_ruta());
-        jTextField4_lugar_salida.setText(r.getLugar_salida());
-        jTextField5_lugar_llegada.setText(r.getLugar_llegada());
-        jTextField6_hora_salida.setText(r.getHora_salida());
-        jTextField7_hora_llegada.setText(r.getHora_llegada());
+    // <editor-fold desc="KeyTyped methods">
 
-        if (r.isHabilidato()) {
-            jRadioButton_habilitado.setSelected(true);
-            jRadioButton_deshabilitada.setSelected(false);
-        } else {
-            jRadioButton_habilitado.setSelected(false);
-            jRadioButton_deshabilitada.setSelected(true);
+    private void jTextField6_hora_salida_horaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6_hora_salida_horaKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || jTextField6_hora_salida_hora.getText().length() == 2) {
+            evt.consume();
         }
-    }
+    }//GEN-LAST:event_jTextField6_hora_salida_horaKeyTyped
 
-    private void guardar_nueva_ruta() {//Guarda la ruta una vez que el usuario haya rellendo la informacion de dicha ruta 
-        Ruta r = new Ruta();
-        if (jRadioButton_habilitado.isSelected()) {
-            r.setHabilidato(true);
-        } else {
-            r.setHabilidato(false);
+    private void jTextField7_hora_llegada_horaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7_hora_llegada_horaKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || jTextField7_hora_llegada_hora.getText().length() == 2) {
+            evt.consume();
         }
-        r.setCosto(Integer.parseInt(jTextField2_costo.getText()));
-        r.setDescripcion_ruta(jTextArea1_descripcion.getText());
-        r.setLugar_salida(jTextField4_lugar_salida.getText());
-        r.setLugar_llegada(jTextField5_lugar_llegada.getText());
-        r.setHora_salida(jTextField6_hora_salida.getText());
-        r.setHora_llegada(jTextField7_hora_llegada.getText());
-        Memoria.sql_lite_query.Query("INSERT INTO RUTA("
-                + "Costo"
-                + ",Descripcion_ruta"
-                + ",Lugar_salida"
-                + ",Lugar_llegada"
-                + ",Hora_salida"
-                + ",Hora_llegada"
-                + ",Habilitado)"
-                + "VALUES("
-                + "'" + r.getCosto() + "',"
-                + "'" + r.getDescripcion_ruta() + "',"
-                + "'" + r.getLugar_salida() + "',"
-                + "'" + r.getLugar_llegada() + "',"
-                + "'" + r.getHora_salida() + "',"
-                + "'" + r.getHora_llegada() + "',"
-                + "'" + r.isHabilidato() + "');", "Ruta agregada");
-        cargar_rutas();
-        rellenar_lista_rutas();
-        limpiar_espacios();
-        Run.message("Ruta " + r.getNombreRuta() + " agregada!", "Agreagado", 1);
-    }
+    }//GEN-LAST:event_jTextField7_hora_llegada_horaKeyTyped
 
-    private void limpiar_espacios() {//Elimina los espacios de que esten rellenados 
-        jTextField2_costo.setText("");
-        jTextArea1_descripcion.setText("");
-        jTextField4_lugar_salida.setText("");
-        jTextField5_lugar_llegada.setText("");
-        jTextField6_hora_salida.setText("");
-        jTextField7_hora_llegada.setText("");
-    }
+    private void jTextField_hora_salida_minutoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_hora_salida_minutoKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || jTextField_hora_salida_minuto.getText().length() == 2) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField_hora_salida_minutoKeyTyped
 
+    private void jTextField_hora_llegada_minutoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_hora_llegada_minutoKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || jTextField_hora_llegada_minuto.getText().length() == 2) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField_hora_llegada_minutoKeyTyped
+
+    private void jTextField2_costoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2_costoKeyTyped
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField2_costoKeyTyped
+
+    // </editor-fold>
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1_actualizar_ruta_seleccionada;
     private javax.swing.JButton jButton2_guardar_ruta_cancelar_cambios;
     private javax.swing.JButton jButton3_volver;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -424,6 +675,7 @@ public class MCreacionRutas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel_status;
     private javax.swing.JList<Ruta> jList_rutas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton_deshabilitada;
@@ -434,8 +686,10 @@ public class MCreacionRutas extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2_costo;
     private javax.swing.JTextField jTextField4_lugar_salida;
     private javax.swing.JTextField jTextField5_lugar_llegada;
-    private javax.swing.JTextField jTextField6_hora_salida;
-    private javax.swing.JTextField jTextField7_hora_llegada;
+    private javax.swing.JTextField jTextField6_hora_salida_hora;
+    private javax.swing.JTextField jTextField7_hora_llegada_hora;
+    private javax.swing.JTextField jTextField_hora_llegada_minuto;
+    private javax.swing.JTextField jTextField_hora_salida_minuto;
     // End of variables declaration//GEN-END:variables
 
 }

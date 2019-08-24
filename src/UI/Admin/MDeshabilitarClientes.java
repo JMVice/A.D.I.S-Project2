@@ -19,10 +19,12 @@ public class MDeshabilitarClientes extends javax.swing.JFrame {
         rellenar_lista();
     }
 
+    //Carga los usuarios dentro de la base de datos en la lista local.
     private void cargar_usuarios() {
         this.lista_usuarios = Memoria.sql_lite_query.obtener_usuarios("SELECT * FROM USER");
     }
 
+    //Rellena la lista con los usuarios dentro de la lista
     private void rellenar_lista() {
         this.modelo_de_lista.clear();
         for (Usuario u : this.lista_usuarios) {
@@ -33,6 +35,7 @@ public class MDeshabilitarClientes extends javax.swing.JFrame {
         this.jList_usuarios.setModel(this.modelo_de_lista);
     }
 
+    //Ajustes del Frame
     private void settings() {
         //Establece el icono en la barra de estado y en el icono.
         setIconImage(Memoria.getIconImage());
@@ -208,7 +211,7 @@ public class MDeshabilitarClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_habilitarActionPerformed
 
     private void jButton_deshabilitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_deshabilitarActionPerformed
-        //Funcionalidad de botón para habílitar usuario y realizar consultas requeridas a la base de datos
+        //Funcionalidad de botón para deshabilitar usuario y realizar consultas requeridas a la base de datos
         if (this.usuario_a_editar != null) {
             String nombre_usuario_seleccionado = this.usuario_a_editar.getNombre();
             Memoria.sql_lite_query.Query("UPDATE USER\n"
@@ -230,7 +233,6 @@ public class MDeshabilitarClientes extends javax.swing.JFrame {
         MNavAdmin mNavAdmin = new MNavAdmin();
         this.dispose();
     }//GEN-LAST:event_jButton_volverActionPerformed
-
     
     //Formato del color de los mensajes desplegados de las acciones ejecutadas
     private void label_status_change(String message, String color) {

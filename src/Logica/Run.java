@@ -9,8 +9,28 @@ public class Run {
 
     //Metodo de inicializacion del programa. Se coloca en el Main.
     public static void start_program() {
-        //Abre el menu de log in.
-        MLogin mLogin = new MLogin();
+        //Verifica si la base de datos existe.
+        if (Memoria.sql_lite_query.verificar_si_existe_base_de_datos(Memoria.database_name)) {
+            //Verifica que todas las tablas existan
+            String[] tables = {"USER","HISTORIAL_COMPRA","RUTA","TARJETA","TICKET"};
+            if (Memoria.sql_lite_query.check_tables_existence(tables)) {
+                //Abre el menu de log in.
+                MLogin mLogin = new MLogin();
+            } else{
+                message("La base de datos ha sido modificada o esta dañanada.\n"
+                        + "(Hay tablas faltantes en la base de datos)", "DB DAMAGED!", 0);
+                //Cierra el programa
+                System.exit(0);
+            }
+        } else {
+            message("La base de datos no ha sido encontrada!\nPor favor"
+                    + ", coloque la base de datos "
+                    + Memoria.app_name + ".db en la misma ruta"
+                    + " en la\nque se encuentra el programa y"
+                    + " vuelva a intentar ejecutar el programa.", "DB NOT FOUND!", 0);
+            //Cierra el programa
+            System.exit(0);
+        }
     }
 
     //Metodo que genera numeros aleatorios segun se especifique como un maximo
@@ -56,7 +76,7 @@ public class Run {
         return result;
     }
 
-    //Metodo que regresa una letra aleatoria del alfabeto.
+    //Metodo que retorna una letra aleatoria del alfabeto.
     public static String randomLetter() {
         String[] alfabeto = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "O", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "Z", "X", "Y"};
         String result = "";
@@ -71,6 +91,7 @@ public class Run {
         return result;
     }
 
+    //Genera una ventana JOptionPane con el texto que se le pase al metodo
     /**
      * 0=Error 1=Message 2=Alert 3=What
      *
@@ -99,6 +120,7 @@ public class Run {
         }
     }
 
+    //Este metodo genera un JOptionPane que pregunta al usuario la accion a tomar.
     /**
      * options: 0: Yes, no. Yes=0. No=1. X=-1. 1: Yes, no, cancel. Yes=0. No=1.
      * Cancel:2. X=-1. 2: Accept, cancel. Accept=0. Cancel:2. X=-1.

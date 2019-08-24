@@ -39,7 +39,7 @@ public class MNavAdmin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1_editar_rutas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1_editar_rutas.setText("Editor de rutas");
+        jButton1_editar_rutas.setText("Menú de rutas");
         jButton1_editar_rutas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1_editar_rutasActionPerformed(evt);
@@ -47,7 +47,7 @@ public class MNavAdmin extends javax.swing.JFrame {
         });
 
         jButton2_administrar_usuarios.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2_administrar_usuarios.setText("Agregar o deshabilitar usuario");
+        jButton2_administrar_usuarios.setText("Administrar admins y choferes");
         jButton2_administrar_usuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2_administrar_usuariosActionPerformed(evt);
@@ -66,7 +66,7 @@ public class MNavAdmin extends javax.swing.JFrame {
         jLabel1_bienvenida.setText("Bienvenido [Nombre usuario]");
 
         jButton1_deshabiltar_cliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1_deshabiltar_cliente.setText("Deshabilitar cliente");
+        jButton1_deshabiltar_cliente.setText("Habilitar/deshabilitar clientes");
         jButton1_deshabiltar_cliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1_deshabiltar_clienteActionPerformed(evt);
@@ -79,17 +79,16 @@ public class MNavAdmin extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(19, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel1_bienvenida)
+                        .addGap(23, 23, 23))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(13, 13, 13)
-                            .addComponent(jLabel1_bienvenida)
-                            .addGap(23, 23, 23))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2_administrar_usuarios)
-                            .addComponent(jButton1_editar_rutas, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3_log_out, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton1_deshabiltar_cliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton2_administrar_usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1_editar_rutas, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton3_log_out, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1_deshabiltar_cliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -115,7 +114,7 @@ public class MNavAdmin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,21 +128,25 @@ public class MNavAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3_log_outActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3_log_outActionPerformed
+        //Boton de cerrar sesion
         MLogin mLogin = new MLogin();
         this.dispose();
     }//GEN-LAST:event_jButton3_log_outActionPerformed
 
     private void jButton1_editar_rutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_editar_rutasActionPerformed
+        //Boton para ir al menu de editar rutas
         MCreacionRutas mCreacionRutas = new MCreacionRutas();
         this.dispose();
     }//GEN-LAST:event_jButton1_editar_rutasActionPerformed
 
     private void jButton2_administrar_usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_administrar_usuariosActionPerformed
+        //Boton para ir al menu de administrar usuarios
         MCreacionUsuarios mCreacionUsuarios = new MCreacionUsuarios();
         this.dispose();
     }//GEN-LAST:event_jButton2_administrar_usuariosActionPerformed
 
     private void jButton1_deshabiltar_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_deshabiltar_clienteActionPerformed
+        //Boton para ir al menu de deshabilitar o habilitar usuarios
         MDeshabilitarClientes mDeshabilitarClientes = new MDeshabilitarClientes();
         this.dispose();
     }//GEN-LAST:event_jButton1_deshabiltar_clienteActionPerformed

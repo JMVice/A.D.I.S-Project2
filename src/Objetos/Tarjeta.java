@@ -5,6 +5,9 @@ import Logica.Memoria;
 
 public class Tarjeta {
 
+    //NOTA: Las tarjetas VISA siempre comienzan con el numero 4.
+    //Las tarjetas MasterCard siempre comienzan con el numero 5.
+    //La longitud de cualquier tarjeta es siempre de 16 digitos.
     //Las variables se ajustan a todas sus equivalentes a las de la base de 
     //datos.
     private int DB_ID;
@@ -22,7 +25,19 @@ public class Tarjeta {
 
     @Override
     public String toString() {
-        return AES.decrypt(this.Num_tarjeta, Memoria.DBKeyPassword);
+        //Usamos stringbuilder para eliminar los todos los numeros de la tarjeta hasta tener sólo 4.
+        StringBuilder sb = new StringBuilder(AES.decrypt(this.Num_tarjeta, Memoria.DBKeyPassword));
+        String tipo_tarjeta = "VISA";
+        //Si el numero de tarjeta es 5 se setea como MasterCard.
+        if (sb.charAt(0) == '5') {
+            tipo_tarjeta = "MasterCard";
+        }
+        //Borra los primeros 12 numeros
+        for (int i = 0; i < 12; i++) {
+            sb.deleteCharAt(0);
+        }
+        //Regresa el formato de string como xxxxNNNN. Visa/MasterCard
+        return "xxxx" + sb.toString() + ". " + tipo_tarjeta;
     }
 
     //Constructor para dar todas las variables.
@@ -33,6 +48,42 @@ public class Tarjeta {
         this.CVV = CVV;
         this.Fecha_caducidad = Fecha_caducidad;
         this.Saldo = Saldo;
+    }
+
+    //Regresa el mes de caducidad de la tarjeta
+    public int obtener_mes_vencimiento() {
+        //Variables para hacer la extraccion del mes de caducidad.
+        String fecha = AES.decrypt(this.Fecha_caducidad, Memoria.DBKeyPassword);
+        StringBuilder stringBuilder = new StringBuilder(fecha);
+        String mes = "";
+
+        //Logica de extraccion. Ejmeplo de fecha: 10-2058
+        while (stringBuilder.charAt(0) != '-') {
+            mes += stringBuilder.charAt(0);
+            stringBuilder.deleteCharAt(0);
+        }
+        return Integer.parseInt(mes);
+    }
+
+    //Regresa el mes de caducidad de la tarjeta
+    public int obtener_anio_vencimiento() {
+        //Variables para hacer la extraccion del año de caducidad.
+        String fecha = AES.decrypt(this.Fecha_caducidad, Memoria.DBKeyPassword);
+        StringBuilder stringBuilder = new StringBuilder(fecha);
+        String anio = "";
+
+        //Logica de extraccion. Ejmeplo de fecha: 10-2058
+        while (stringBuilder.charAt(0) != '-') {
+            stringBuilder.deleteCharAt(0);
+        }
+        stringBuilder.deleteCharAt(0);
+
+        while (stringBuilder.length() != 0) {
+            anio += stringBuilder.charAt(0);
+            stringBuilder.deleteCharAt(0);
+        }
+
+        return Integer.parseInt(anio);
     }
 
     //Seccion de gets y set
