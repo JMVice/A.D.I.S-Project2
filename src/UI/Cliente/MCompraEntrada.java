@@ -276,8 +276,6 @@ public class MCompraEntrada extends javax.swing.JFrame {
 
     private void jButton_agregar_rutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_agregar_rutaActionPerformed
         //Se agregan la ruta en la lista tiquetes para comprar
-        
-        
         System.out.println(this.jList_rutas_disponibles.getSelectedValue().getNombreRuta());
         if (this.modelo_rutas_seleccionadas.size() < 9) {
             this.modelo_rutas_seleccionadas.add(0, this.jList_rutas_disponibles.getSelectedValue());
