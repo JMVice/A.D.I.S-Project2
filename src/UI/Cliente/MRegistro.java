@@ -187,7 +187,7 @@ public class MRegistro extends javax.swing.JFrame {
                 && sin_espacios_vacios()
                 && longitud_contrasenia(8)
                 && las_contrasenias_coinciden()
-                && longitud_nombre_de_usuario(5, 24)) {
+                && longitud_nombre_de_usuario(5, 15)) {
             crear_cuenta();
         }
     }//GEN-LAST:event_jButton_crear_cuentaActionPerformed

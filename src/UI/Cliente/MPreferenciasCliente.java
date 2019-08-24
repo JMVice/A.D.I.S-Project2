@@ -5,6 +5,8 @@ import Logica.Memoria;
 import Logica.Run;
 import Objetos.Usuario;
 import UI.MLogin;
+import java.awt.Color;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 public class MPreferenciasCliente extends javax.swing.JFrame {
@@ -26,6 +28,7 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
         //No dejar que el frame se pueda hacer de tamaño grande
         this.setResizable(false);
         rellenar_espacios();
+        label_status_change("", "red");
     }
 
     //Funcionalidad de los espacios para texto (jTextFields) para capturar información del menú
@@ -56,6 +59,7 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
         jButton1_guardar_cambios = new javax.swing.JButton();
         jButton2_deshabilitar_cuenta = new javax.swing.JButton();
         jButton_cambiar_contrasenia = new javax.swing.JButton();
+        jLabel_status = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,6 +108,8 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
             }
         });
 
+        jLabel_status.setText("STATUS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -132,8 +138,9 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1_guardar_cambios, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
                             .addComponent(jButton2_deshabilitar_cuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton_cambiar_contrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                            .addComponent(jButton_cambiar_contrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel_status, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,18 +168,19 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(jTextField6_ap2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jToggleButton2_atras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(19, 19, 19))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1_guardar_cambios)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_cambiar_contrasenia)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                        .addComponent(jButton2_deshabilitar_cuenta)
-                        .addGap(29, 29, 29))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2_deshabilitar_cuenta))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jToggleButton2_atras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jLabel_status)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -189,7 +197,7 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -201,19 +209,36 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton2_atrasActionPerformed
 
     private void jButton1_guardar_cambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_guardar_cambiosActionPerformed
-        //Funcionalidad de botón para guardar información y actualizar base de datos
+        if (usuario_no_repetido()
+                && sin_espacios_vacios()
+                && longitud_nombre_de_usuario(5, 15)) {
+            guardar_cambios();
+        }
+    }//GEN-LAST:event_jButton1_guardar_cambiosActionPerformed
+
+    //Guarda los cambios realizados en la base de datos.
+    private void guardar_cambios() {
+        
+        //Variables temporales para construir el objeto.
         Memoria.usuario_actual.setNombre_de_usuario(jTextField1_nombre_usuario.getText());
         Memoria.usuario_actual.setNombre(jTextField2_nombre.getText());
         Memoria.usuario_actual.setAp_materno(jTextField6_ap2.getText());
         Memoria.usuario_actual.setAp_paterno(jTextField3_ap1.getText());
+        
+        //Consulta SQLite para hacer el update a la base de datos
         Memoria.sql_lite_query.Query("UPDATE USER\n"
                 + "SET Nombre_usuario = '" + Memoria.usuario_actual.getNombre_de_usuario() + "',"
                 + "Nombre = '" + Memoria.usuario_actual.getNombre() + "',"
                 + "Ap_paterno = '" + Memoria.usuario_actual.getAp_paterno() + "',"
                 + "Ap_materno = '" + Memoria.usuario_actual.getAp_materno() + "'"
                 + "WHERE UserID = '" + Memoria.usuario_actual.getDB_ID() + "';", "Usuario actualizado");
+        
+        //Mensaje de exito
         Run.message("Datos de la cuenta actualizados!", "Hecho", 1);
-    }//GEN-LAST:event_jButton1_guardar_cambiosActionPerformed
+        
+        //Limpia errores.
+        label_status_change("", "red");
+    }
 
     private void jButton2_deshabilitar_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_deshabilitar_cuentaActionPerformed
         //Funcionalida del botón de deshabilitar cuenta de cliente
@@ -237,6 +262,71 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2_deshabilitar_cuentaActionPerformed
 
+    //Verifica si el nombre de usuario seleccionado no esta ya en uso por otro usuario.
+    //Además, si el nombre de usuario es igual al actual, regresa true.
+    private boolean usuario_no_repetido() {
+        if (!Memoria.usuario_actual.getNombre_de_usuario().toLowerCase().equals(jTextField1_nombre_usuario.getText().toLowerCase())) {
+            LinkedList<Objetos.Usuario> lista_usuarios = Memoria.sql_lite_query.obtener_usuarios("Select * from USER");
+            for (Objetos.Usuario u : lista_usuarios) {
+                if (u.getNombre_de_usuario().toLowerCase().equals(this.jTextField1_nombre_usuario.getText().toLowerCase())) {
+                    label_status_change("El nombre de usuario " + u.getNombre_de_usuario() + " ya esta en uso.", "red");
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return true;
+        }
+    }
+
+    //Verifica que el usuario haya llenado todos los espacios.
+    private boolean sin_espacios_vacios() {
+        if (!this.jTextField1_nombre_usuario.getText().equals("")
+                && !this.jTextField2_nombre.getText().equals("")
+                && !this.jTextField3_ap1.getText().equals("")
+                && !this.jTextField6_ap2.getText().equals("")) {
+            return true;
+        } else {
+            label_status_change("Ningun espacio puede estar vacio", "red");
+            return false;
+        }
+    }
+
+    private boolean longitud_nombre_de_usuario(int longitud_minima, int longitud_maxima) {
+        String nombre_usuario = this.jTextField1_nombre_usuario.getText();
+        if (nombre_usuario.length() >= longitud_minima && nombre_usuario.length() <= longitud_maxima) {
+            return true;
+        } else {
+            if (nombre_usuario.length() < longitud_minima) {
+                label_status_change("El nombre de usuario debe ser de al menos " + longitud_minima + " caracteres", "red");
+            } else {
+                label_status_change("El nombre de usuario no puede ser mayor a " + longitud_maxima + " caracteres", "red");
+            }
+            return false;
+        }
+    }
+
+    //Asigna mensajes de error en pantalla.
+    private void label_status_change(String message, String color) {
+        switch (color) {
+            case "red":
+                jLabel_status.setForeground(Color.red);
+                break;
+            case "blue":
+                jLabel_status.setForeground(Color.blue);
+                break;
+            case "green":
+                jLabel_status.setForeground(Color.green);
+                break;
+            case "black":
+                jLabel_status.setForeground(Color.black);
+                break;
+            default:
+                jLabel_status.setForeground(Color.black);
+        }
+        jLabel_status.setText(message);
+    }
+
     private void jButton_cambiar_contraseniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cambiar_contraseniaActionPerformed
         MCambiarContrasenia mCambiarContrasenia = new MCambiarContrasenia();
         this.dispose();
@@ -254,6 +344,7 @@ public class MPreferenciasCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel_status;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1_nombre_usuario;
     private javax.swing.JTextField jTextField2_nombre;

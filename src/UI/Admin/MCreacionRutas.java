@@ -651,7 +651,7 @@ public class MCreacionRutas extends javax.swing.JFrame {
 
     private void jTextField2_costoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2_costoKeyTyped
         char c = evt.getKeyChar();
-        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE) {
+        if (!(Character.isDigit(c)) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || jTextField2_costo.getText().length() == 9) {
             evt.consume();
         }
     }//GEN-LAST:event_jTextField2_costoKeyTyped
